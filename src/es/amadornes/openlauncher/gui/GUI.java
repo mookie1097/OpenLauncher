@@ -8,14 +8,20 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Polygon;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import es.amadornes.openlauncher.OpenLaucher;
 import es.amadornes.openlauncher.api.ColorScheme;
 import es.amadornes.openlauncher.api.Frame;
 
 public class GUI extends Frame {
-
+	
+	public int screen = 0;
+	
 	public GUI(int width, int height) {
 		super(width, height);
 		insets = new Insets(30, 7, 7, 7);
@@ -27,6 +33,7 @@ public class GUI extends Frame {
 		g2d.setPaint(ColorScheme.active.background);
 		g2d.fillRect(0, 0, width, height);
 		renderFrame(g2d);
+		renderSidebar(g2d);
 	}
 	
 	private synchronized void renderFrame(Graphics2D g){
@@ -47,7 +54,6 @@ public class GUI extends Frame {
 		//Render buttons
 		renderButtons(g);
 	}
-	
 	private synchronized void renderGrip(Graphics2D g){
 		Insets i = insets;
 		int size = 25;
@@ -58,7 +64,6 @@ public class GUI extends Frame {
 		p.addPoint(width, height);
 		g.fillPolygon(p);
 	}
-	
 	private synchronized void renderButtons(Graphics2D g){
 		Insets i = insets;
 		int width = 25;
@@ -84,18 +89,60 @@ public class GUI extends Frame {
 		g.drawString(minimize, this.width - i.right - (width * 2) - 3 - (width/2) - ((float)(mb.getWidth()/2)), ((float)(((i.top * 0.75)/2) + (mb.getHeight()/2))) - 8);
 	}
 	
+	private synchronized void renderSidebar(Graphics2D g){
+		Insets i = insets;
+		//TODO RENDER BAR
+		g.setPaint(ColorScheme.active.titlebar);
+		g.fillRect(i.left + 170, i.top, 6, height - i.top - i.bottom);
+		
+		
+		//Render image rectangle
+		if(OpenLaucher.loggedIn){
+			g.setPaint(Color.BLACK);
+			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
+			String username = OpenLaucher.username;
+			try {
+				BufferedImage img = ImageIO.read(new URL("https://minotar.neta/avatar/" + username + "/150.png"));
+				g.drawImage(img, i.left + 10, i.top + 10, null);
+			} catch (Exception e) {
+				int tx = 30;
+				int ty = tx;
+				g.translate(i.left + 3, i.top + 21);
+				g.translate(tx, ty);
+				g.rotate(Math.PI/4);
+				
+				g.setPaint(Color.WHITE);
+				Font f = OpenLaucher.font.deriveFont(Font.BOLD, 36);
+				if(f.getFontName().equalsIgnoreCase("Pixelade")){
+					f = f.deriveFont(55F);
+				}
+				g.setFont(f);
+				g.drawString("ERROR", 0, 0);
+				
+				g.rotate(-(Math.PI/4));
+				g.translate(-tx, -ty);
+				g.translate(-(i.left + 10), -(i.top + 10));
+				
+				g.setFont(f.deriveFont(18F));
+				g.setPaint(Color.BLACK);
+				
+				FontMetrics fm = new FontMetrics(f){private static final long serialVersionUID = 1L;};
+				Rectangle2D b = fm.getStringBounds(username, g);
+				g.drawString(username, i.left + 5 + ((float)((b.getWidth()/2))), i.top + 15 + 160);//TODO
+			}
+		}
+	}
+	
 	@Override
 	public void onClick(int x, int y, int button) {
 		clickClose(x, y);
 		clickMinimize(x, y);
 	}
-	
 	@Override
 	public void onMouseUp(int x, int y, int button) {
 		clickClose(x, y);
 		clickMinimize(x, y);
 	}
-	
 	private void clickClose(int x, int y){
 		Insets i = insets;
 		int width = 25;
@@ -105,7 +152,6 @@ public class GUI extends Frame {
 			}
 		}
 	}
-	
 	private void clickMinimize(int x, int y){
 		Insets i = insets;
 		int width = 25;
@@ -115,5 +161,5 @@ public class GUI extends Frame {
 			}
 		}
 	}
-
+	
 }
