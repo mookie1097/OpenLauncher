@@ -125,12 +125,15 @@ public class GUI extends Frame {
 				
 				g.setFont(f.deriveFont(18F));
 				g.setPaint(Color.BLACK);
-				
-				FontMetrics fm = new FontMetrics(f){private static final long serialVersionUID = 1L;};
-				Rectangle2D b = fm.getStringBounds(username, g);
-				g.drawString(username, i.left + 5 + ((float)((b.getWidth()/2))), i.top + 15 + 160);//TODO
+				drawCenteredString(username, i.left + 10, i.top + 15 + 160, 160, (Graphics)g);
 			}
 		}
+	}
+	
+	private static void drawCenteredString(String s, int x, int y, int width, Graphics g) {
+		FontMetrics fm = g.getFontMetrics();
+		int nx = x + (width - fm.stringWidth(s)) / 2;
+		g.drawString(s, nx, y);
 	}
 	
 	@Override
