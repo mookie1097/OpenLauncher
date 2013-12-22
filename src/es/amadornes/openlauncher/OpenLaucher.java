@@ -3,6 +3,7 @@ package es.amadornes.openlauncher;
 import java.awt.Font;
 import java.io.InputStream;
 
+import es.amadornes.openlauncher.api.ComponentFancyButton1;
 import es.amadornes.openlauncher.gui.GUI;
 
 public class OpenLaucher {
@@ -21,6 +22,10 @@ public class OpenLaucher {
 			font = new Font("Arial", Font.PLAIN, 14);
 		}
 		gui = new GUI(1280, 720);
+		gui.addComponent(new ComponentFancyButton1(29 - gui.insets.left, 659 - gui.insets.top, 150, 40));
+		gui.addComponent(new ComponentFancyButton1(29 - gui.insets.left, 659 - gui.insets.top - 45, 150, 40));
+		gui.addComponent(new ComponentFancyButton1(29 - gui.insets.left, 659 - gui.insets.top - 45 - 45, 150, 40));
+		gui.addComponent(new ComponentFancyButton1(29 - gui.insets.left, 659 - gui.insets.top - 45 - 45 - 45, 150, 40).setSelected(true));
 		gui.center();
 		gui.show();
 	}

@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -21,6 +22,8 @@ import es.amadornes.openlauncher.api.Frame;
 public class GUI extends Frame {
 	
 	public int screen = 0;
+	private boolean dragging = false;
+	private Point mouseDownCompCoords = null;
 	
 	public GUI(int width, int height) {
 		super(width, height);
@@ -91,7 +94,7 @@ public class GUI extends Frame {
 	
 	private synchronized void renderSidebar(Graphics2D g){
 		Insets i = insets;
-		//TODO RENDER BAR
+		//Render separator column
 		g.setPaint(ColorScheme.active.titlebar);
 		g.fillRect(i.left + 170, i.top, 6, height - i.top - i.bottom);
 		
@@ -100,9 +103,12 @@ public class GUI extends Frame {
 		if(OpenLaucher.loggedIn){
 			g.setPaint(Color.BLACK);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
+			
 			String username = OpenLaucher.username;
+			Font f = OpenLaucher.font.deriveFont(Font.BOLD, 36);
+			
 			try {
-				BufferedImage img = ImageIO.read(new URL("https://minotar.neta/avatar/" + username + "/150.png"));
+				BufferedImage img = ImageIO.read(new URL("https://minotar.net/avatar/" + username + "/150.png"));
 				g.drawImage(img, i.left + 10, i.top + 10, null);
 			} catch (Exception e) {
 				int tx = 30;
@@ -112,7 +118,7 @@ public class GUI extends Frame {
 				g.rotate(Math.PI/4);
 				
 				g.setPaint(Color.WHITE);
-				Font f = OpenLaucher.font.deriveFont(Font.BOLD, 36);
+				
 				if(f.getFontName().equalsIgnoreCase("Pixelade")){
 					f = f.deriveFont(55F);
 				}
@@ -122,11 +128,13 @@ public class GUI extends Frame {
 				g.rotate(-(Math.PI/4));
 				g.translate(-tx, -ty);
 				g.translate(-(i.left + 10), -(i.top + 10));
-				
-				g.setFont(f.deriveFont(18F));
-				g.setPaint(Color.BLACK);
-				drawCenteredString(username, i.left + 10, i.top + 15 + 160, 160, (Graphics)g);
 			}
+			
+			g.setFont(f.deriveFont(18F));
+			g.setPaint(Color.BLACK);
+			drawCenteredString(username, i.left + 10, i.top + 20 + 160, 160, (Graphics)g);
+		}else{
+			//TODO NOT LOGGED IN
 		}
 	}
 	
@@ -143,26 +151,44 @@ public class GUI extends Frame {
 	}
 	@Override
 	public void onMouseUp(int x, int y, int button) {
-		clickClose(x, y);
-		clickMinimize(x, y);
+		dragging = false;
+		if(clickClose(x, y))
+			System.exit(0);
+		if(clickMinimize(x, y))
+			frame.setState(JFrame.ICONIFIED);
 	}
-	private void clickClose(int x, int y){
+	public void onMouseDown(int x, int y, int button){
+		if(y >= 0 && y < insets.top){
+			if(!clickClose(x, y) && !clickMinimize(x, y)){
+				dragging = true;
+				mouseDownCompCoords = new Point(x, y);
+			}
+		}
+	}
+	public void onMouseMove(int x, int y) {
+		if(dragging){
+			frame.setLocation((x + frame.getX()) - mouseDownCompCoords.x, (y + frame.getY()) - mouseDownCompCoords.y);
+		}
+	}
+	private boolean clickClose(int x, int y){
 		Insets i = insets;
 		int width = 25;
 		if(x >= this.width - i.right - (width * 2) && x < this.width - i.right){
 			if(y >= 0 && y < i.top * 0.75){
-				System.exit(0);
+				return true;
 			}
 		}
+		return false;
 	}
-	private void clickMinimize(int x, int y){
+	private boolean clickMinimize(int x, int y){
 		Insets i = insets;
 		int width = 25;
 		if(x >= this.width - i.right - (width * 2) - width - 1 && x < this.width - i.right - (width * 2) - 1){
 			if(y >= 0 && y < i.top * 0.75){
-				frame.setState(JFrame.ICONIFIED);
+				return true;
 			}
 		}
+		return false;
 	}
 	
 }

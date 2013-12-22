@@ -6,12 +6,13 @@ public abstract class Component {
 	
 	protected int x, y, width, height;
 	private boolean overlap = true;
+	protected Frame owner = null;
 	
 	public Component(int x, int y, int width, int height) {
 		this.width = Math.max(1, width);
 		this.height = Math.max(1, height);
-		this.x = Math.min(Math.max(x, 0), this.width);
-		this.y = Math.min(Math.max(y, 0), this.height);
+		this.x = Math.max(x, 0);
+		this.y = Math.max(y, 0);
 	}
 	
 	public void shouldOverlap(boolean should){

@@ -91,7 +91,9 @@ public class Frame {
 			public void mouseMoved(MouseEvent ev) {
 				onMouseMove(ev.getX(), ev.getY());
 			}
-			public void mouseDragged(MouseEvent ev) {}
+			public void mouseDragged(MouseEvent ev) {
+				onMouseMove(ev.getX(), ev.getY());
+			}
 		});
 		screen.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent ev) {
@@ -255,6 +257,7 @@ public class Frame {
 	
 	public void addComponent(final Component c, int zIndex){
 		if(!components.keySet().contains(c)){
+			c.owner = this;
 			components.put(c, new Integer(zIndex));
 		}
 	}
@@ -344,7 +347,7 @@ public class Frame {
 	protected synchronized void renderComponents(Graphics g){
 		List<Component> components = sortComponentsByZIndex();
 		for(Component c : components){
-			c.render(g.create(c.getX(), c.getY(), c.getWidth(), c.getHeight()));
+			c.render(g.create(c.x, c.y, c.width, c.height));
 		}
 	}
 	
