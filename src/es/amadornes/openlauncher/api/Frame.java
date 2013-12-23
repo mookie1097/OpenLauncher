@@ -28,7 +28,7 @@ import javax.swing.JFrame;
 
 public class Frame {
 	
-	protected Map<Component, Integer> components = new HashMap<Component, Integer>();
+	public Map<Component, Integer> components = new HashMap<Component, Integer>();
 	protected int x, y, width, height;
 	protected JFrame frame = new JFrame(){
 		private static final long serialVersionUID = 1L;
@@ -50,6 +50,7 @@ public class Frame {
 	};
 	private BufferStrategy bs = null;
 	public Insets insets = new Insets(0, 0, 0, 0);
+	protected int tab = 0;
 	
 	public Frame(int width, int height) {
 		frame.setUndecorated(true);

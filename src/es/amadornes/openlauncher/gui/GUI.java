@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import es.amadornes.openlauncher.OpenLaucher;
 import es.amadornes.openlauncher.api.ColorScheme;
 import es.amadornes.openlauncher.api.Frame;
+import es.amadornes.openlauncher.api.RenderHelper;
 
 public class GUI extends Frame {
 	
@@ -132,16 +133,10 @@ public class GUI extends Frame {
 			
 			g.setFont(f.deriveFont(18F));
 			g.setPaint(Color.BLACK);
-			drawCenteredString(username, i.left + 10, i.top + 20 + 160, 160, (Graphics)g);
+			RenderHelper.drawCenteredString(username, i.left + 10, i.top + 20 + 160, 160, (Graphics)g);
 		}else{
 			//TODO NOT LOGGED IN
 		}
-	}
-	
-	private static void drawCenteredString(String s, int x, int y, int width, Graphics g) {
-		FontMetrics fm = g.getFontMetrics();
-		int nx = x + (width - fm.stringWidth(s)) / 2;
-		g.drawString(s, nx, y);
 	}
 	
 	@Override

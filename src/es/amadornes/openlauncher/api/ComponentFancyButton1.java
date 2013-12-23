@@ -1,14 +1,19 @@
 package es.amadornes.openlauncher.api;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 
+import es.amadornes.openlauncher.OpenLaucher;
+
 public class ComponentFancyButton1 extends Component {
 
+	protected String text = "";
+	
 	private static int movement = 15;
 	
 	protected boolean hovering = false;
@@ -17,10 +22,13 @@ public class ComponentFancyButton1 extends Component {
 	protected int moved = 0;
 	
 	protected boolean selected = false;
+	
+	protected int tab = 0;
 
-	public ComponentFancyButton1(int x, int y, int width, int height) {
+	public ComponentFancyButton1(int x, int y, int width, int height, String text) {
 		super(x, y, width, height);
 		realX = x;
+		this.text = text != null ? text : "";
 		final ComponentFancyButton1 me = this;
 		new Thread(new Runnable() {
 			public void run() {
@@ -77,6 +85,7 @@ public class ComponentFancyButton1 extends Component {
 					((ComponentFancyButton1)c).selected = false;
 				}
 			}
+			owner.tab = tab;
 		}
 		selected = true;
 	}
@@ -125,6 +134,20 @@ public class ComponentFancyButton1 extends Component {
 			g.drawLine(0, 0, height - 1, height - 1);
 			g.drawLine(height - 1, height - 1, width - 1 + movement, height - 1);
 		g.translate(0, 1);
+		
+		
+		g.setFont(OpenLaucher.font.deriveFont(Font.BOLD, 18F));
+		g.setPaint(Color.BLACK);
+		RenderHelper.drawCenteredString(text, (int)(width*0.125), (int) (height*0.625), width, (Graphics)g);
+	}
+	
+	public ComponentFancyButton1 setTab(int tab) {
+		this.tab = tab;
+		return this;
+	}
+	
+	public int getTab() {
+		return tab;
 	}
 
 }
