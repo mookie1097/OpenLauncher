@@ -7,10 +7,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -25,10 +26,31 @@ public class GUI extends Frame {
 	public int screen = 0;
 	private boolean dragging = false;
 	private Point mouseDownCompCoords = null;
+	private List<Tab> tabs = new ArrayList<Tab>();
 	
 	public GUI(int width, int height) {
 		super(width, height);
 		insets = new Insets(30, 7, 7, 7);
+	}
+	
+	public void addTab(Tab tab){
+		tabs.add(tab);
+	}
+	
+	public void addTab(Tab tab, int id){
+		while(tabs.size() <= id)
+			tabs.add(null);
+		tabs.set(id, tab);
+	}
+	
+	public List<Tab> getTabs(){
+		return tabs;
+	}
+	
+	public Tab getTab(){
+		if(tabs.size() > tab)
+			return tabs.get(tab);
+		return null;
 	}
 	
 	@Override
@@ -38,13 +60,13 @@ public class GUI extends Frame {
 		g2d.fillRect(0, 0, width, height);
 		renderFrame(g2d);
 		renderSidebar(g2d);
+		if(getTab() != null){
+			getTab().render((Graphics2D) g2d.create(insets.left + 170 + 6, insets.top, width - insets.left - 170 - 6 - insets.right, height - insets.top - insets.bottom));
+		}
 	}
 	
 	private synchronized void renderFrame(Graphics2D g){
 		Insets i = insets;
-		
-		//Render grip
-		renderGrip(g);
 		
 		//Render titlebar
 		g.setPaint(ColorScheme.active.titlebar);
@@ -57,16 +79,6 @@ public class GUI extends Frame {
 		
 		//Render buttons
 		renderButtons(g);
-	}
-	private synchronized void renderGrip(Graphics2D g){
-		Insets i = insets;
-		int size = 25;
-		g.setPaint(ColorScheme.active.titlebar);
-		Polygon p = new Polygon();
-		p.addPoint(width - i.right - size, height);
-		p.addPoint(width, height - i.bottom - size);
-		p.addPoint(width, height);
-		g.fillPolygon(p);
 	}
 	private synchronized void renderButtons(Graphics2D g){
 		Insets i = insets;
@@ -143,6 +155,13 @@ public class GUI extends Frame {
 	public void onClick(int x, int y, int button) {
 		clickClose(x, y);
 		clickMinimize(x, y);
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onClick(x - insets.left - 170 - 6, y - insets.top, button);
+				}
+			}
+		}
 	}
 	@Override
 	public void onMouseUp(int x, int y, int button) {
@@ -151,6 +170,13 @@ public class GUI extends Frame {
 			System.exit(0);
 		if(clickMinimize(x, y))
 			frame.setState(JFrame.ICONIFIED);
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onMouseUp(x - insets.left - 170 - 6, y - insets.top, button);
+				}
+			}
+		}
 	}
 	public void onMouseDown(int x, int y, int button){
 		if(y >= 0 && y < insets.top){
@@ -159,12 +185,58 @@ public class GUI extends Frame {
 				mouseDownCompCoords = new Point(x, y);
 			}
 		}
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onMouseDown(x - insets.left - 170 - 6, y - insets.top, button);
+				}
+			}
+		}
 	}
 	public void onMouseMove(int x, int y) {
 		if(dragging){
 			frame.setLocation((x + frame.getX()) - mouseDownCompCoords.x, (y + frame.getY()) - mouseDownCompCoords.y);
 		}
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onMouseMove(x - insets.left - 170 - 6, y - insets.top);
+				}
+			}
+		}
 	}
+	@Override
+	public void onMouseEnter(int x, int y) {
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onMouseEnter(x - insets.left - 170 - 6, y - insets.top);
+				}
+			}
+		}
+	}
+	@Override
+	public void onMouseLeave(int x, int y) {
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onMouseLeave(x - insets.left - 170 - 6, y - insets.top);
+				}
+			}
+		}
+	}
+	@Override
+	public void onMouseWheelMove(int x, int y, int amount) {
+		if(x >= insets.left + 170 + 6 && x < width - insets.right){
+			if(y >= insets.top && y < height - insets.bottom){
+				if(getTab() != null){
+					getTab().onMouseWheelMove(x - insets.left - 170 - 6, y - insets.top, amount);
+				}
+			}
+		}
+	}
+	
+	
 	private boolean clickClose(int x, int y){
 		Insets i = insets;
 		int width = 25;

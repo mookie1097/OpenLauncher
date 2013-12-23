@@ -6,7 +6,7 @@ public abstract class Component {
 	
 	protected int x, y, width, height;
 	private boolean overlap = true;
-	protected Frame owner = null;
+	public Frame owner = null;
 	
 	public Component(int x, int y, int width, int height) {
 		this.width = Math.max(1, width);
