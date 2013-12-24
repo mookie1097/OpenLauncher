@@ -2,6 +2,8 @@ package es.amadornes.openlauncher.api;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RenderHelper {
 	
@@ -17,6 +19,24 @@ public class RenderHelper {
 		int nx = x + (width - fm.stringWidth(s)) / 2;
 		int ny = y + ((fm.getAscent() - fm.getDescent() + height)/2);
 		g.drawString(s, nx, ny);
+	}
+	
+	public static String[] splitStringInLines(String s, int width, Graphics g) {
+		FontMetrics fm = g.getFontMetrics();
+		char[] str = s.toCharArray();
+		int ch = 0;
+
+		List<String> list = new ArrayList<String>();
+		
+		do{
+			String l = "";
+			do{
+				l = l + str[ch];
+				ch++;
+			}while(fm.stringWidth(l) < width && ch < s.length());
+			list.add(l);
+		}while(ch < s.length());
+		return list.toArray(new String[list.size()]);
 	}
 	
 }

@@ -2,10 +2,13 @@ package es.amadornes.openlauncher.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import es.amadornes.openlauncher.OpenLaucher;
 import es.amadornes.openlauncher.api.Component;
+import es.amadornes.openlauncher.api.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
 
 public class ComponentModpackLogo extends Component {
@@ -17,6 +20,8 @@ public class ComponentModpackLogo extends Component {
 	private boolean hovering = false;
 	
 	private ComponentContainerModpacks owner;
+	
+	public String[] text = new String[]{};
 	
 	public ComponentModpackLogo(int x, int y, int size, Modpack modpack, ComponentContainerModpacks owner) {
 		super(x, y, size, size);
@@ -73,12 +78,24 @@ public class ComponentModpackLogo extends Component {
 		
 		float alpha = progress;
 		alpha /= 100;
-		alpha *= 0.6F;
 		
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha * 0.6F));
 		
 		g2d.setPaint(Color.LIGHT_GRAY);
 		g2d.fillRect(0, 0, width, height);
+		
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+		
+		text = RenderHelper.splitStringInLines(modpack.getName(), width - 5 - 5, g2d);
+		
+		String str = "";
+		for(String s : text){
+			str += s + "\n";
+		}
+		
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font("Arial", Font.PLAIN, width / 8));
+		g2d.drawString(str, 5, (width / 8) + 5);
 		
 		g2d.setComposite(AlphaComposite.Clear);
 	}
