@@ -16,9 +16,12 @@ public class ComponentModpackLogo extends Component {
 	
 	private boolean hovering = false;
 	
-	public ComponentModpackLogo(int x, int y, int size, Modpack modpack) {
+	private ComponentContainerModpacks owner;
+	
+	public ComponentModpackLogo(int x, int y, int size, Modpack modpack, ComponentContainerModpacks owner) {
 		super(x, y, size, size);
 		this.modpack = modpack;
+		this.owner = owner;
 		new Thread(new Runnable() {
 			public void run() {
 				while(true){
@@ -32,7 +35,7 @@ public class ComponentModpackLogo extends Component {
 								progress--;
 							}
 						}
-						Thread.sleep(10);
+						Thread.sleep(5);
 					} catch (Exception e) {}
 				}
 			}
@@ -50,19 +53,22 @@ public class ComponentModpackLogo extends Component {
 		width = height;
 	}
 	
-	@Override
 	public void onMouseEnter(int x, int y) {
 		hovering = true;
 	}
-	
-	@Override
 	public void onMouseLeave(int x, int y) {
 		hovering = false;
 	}
 	
 	@Override
+	public void onMouseUp(int x, int y, int button) {
+		owner.selected = modpack;
+	}
+	
+	@Override
 	public void render(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		
 		g2d.drawImage(modpack.getLogo(), 0, 0, width, height, null);
 		
 		float alpha = progress;
@@ -71,8 +77,8 @@ public class ComponentModpackLogo extends Component {
 		
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 		
-		g2d.setPaint(Color.GRAY);
-		g2d.drawRect(0, 0, width, height);
+		g2d.setPaint(Color.LIGHT_GRAY);
+		g2d.fillRect(0, 0, width, height);
 		
 		g2d.setComposite(AlphaComposite.Clear);
 	}

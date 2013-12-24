@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 
 import es.amadornes.openlauncher.OpenLaucher;
 import es.amadornes.openlauncher.api.ColorScheme;
+import es.amadornes.openlauncher.api.Component;
 import es.amadornes.openlauncher.api.Frame;
 import es.amadornes.openlauncher.api.RenderHelper;
 
@@ -31,6 +32,24 @@ public class GUI extends Frame {
 	public GUI(int width, int height) {
 		super(width, height);
 		insets = new Insets(30, 7, 7, 7);
+	}
+	
+	@Override
+	public void addComponent(Component c) {
+		if(c instanceof Tab){
+			addTab((Tab) c);
+		}else{
+			super.addComponent(c);
+		}
+	}
+	
+	@Override
+	public void addComponent(Component c, int zIndex) {
+		if(c instanceof Tab){
+			addTab((Tab) c);
+		}else{
+			super.addComponent(c, zIndex);
+		}
 	}
 	
 	public void addTab(Tab tab){
@@ -60,6 +79,11 @@ public class GUI extends Frame {
 		g2d.fillRect(0, 0, width, height);
 		renderFrame(g2d);
 		renderSidebar(g2d);
+		
+		//Render title
+		g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+		RenderHelper.drawCenteredString("Open Launcher", 0, 0, width, insets.top, g2d);
+		
 		if(getTab() != null){
 			getTab().render((Graphics2D) g2d.create(insets.left + 170 + 6, insets.top, width - insets.left - 170 - 6 - insets.right, height - insets.top - insets.bottom));
 		}

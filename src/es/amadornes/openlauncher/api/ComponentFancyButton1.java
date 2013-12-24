@@ -138,7 +138,7 @@ public class ComponentFancyButton1 extends Component {
 		
 		g.setFont(OpenLaucher.font.deriveFont(Font.BOLD, 18F));
 		g.setPaint(Color.BLACK);
-		RenderHelper.drawCenteredString(text, (int)(width*0.125), (int) (height*0.625), width, (Graphics)g);
+		RenderHelper.drawCenteredString(text, (int)(width*0.125), (int) (height*0.45), width, (Graphics)g);
 	}
 	
 	public ComponentFancyButton1 setTab(int tab) {
