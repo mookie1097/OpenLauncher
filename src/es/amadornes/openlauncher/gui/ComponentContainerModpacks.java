@@ -55,8 +55,6 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		
 		needsScroll = (i.top + i.bottom + (border * 2) + ((packSeparation + this.logoWidth) * (((int)(Math.floor(shownPacks/packsPerRow) + 1)) / ((progress/100) * (1F - descriptionArea))))) > height;
 		
-		System.out.println(needsScroll);
-		
 		int pack = 0;
 		for(Modpack m : OpenLaucher.modpacks){
 			if(m.isPublic() || m.isUnlocked()){

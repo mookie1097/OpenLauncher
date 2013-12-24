@@ -87,15 +87,18 @@ public class ComponentModpackLogo extends Component {
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 		
 		text = RenderHelper.splitStringInLines(modpack.getName(), width - 5 - 5, g2d);
-		
-		String str = "";
-		for(String s : text){
-			str += s + "\n";
-		}
+
+		float fontDivider = 5;
+		float size = width / fontDivider;
 		
 		g2d.setColor(Color.BLACK);
-		g2d.setFont(new Font("Arial", Font.PLAIN, width / 8));
-		g2d.drawString(str, 5, (width / 8) + 5);
+		g2d.setFont(new Font("Arial", Font.PLAIN, (int)size));
+		
+		int strings = 0;
+		for(String s : text){
+			g2d.drawString(s, 5, (size*(strings+1)) + 5);
+			strings++;
+		}
 		
 		g2d.setComposite(AlphaComposite.Clear);
 	}

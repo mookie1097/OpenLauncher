@@ -34,6 +34,11 @@ public class RenderHelper {
 				l = l + str[ch];
 				ch++;
 			}while(fm.stringWidth(l) < width && ch < s.length());
+			if(str[ch] == ' '){
+				ch++;
+			}else{
+				l += "-";
+			}
 			list.add(l);
 		}while(ch < s.length());
 		return list.toArray(new String[list.size()]);
