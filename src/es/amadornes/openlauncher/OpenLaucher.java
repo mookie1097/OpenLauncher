@@ -23,7 +23,7 @@ public class OpenLaucher {
 	
 	public static void main(String[] args){
 		try {
-			modpacks.add(new Modpack("Test Modpack 1", new URL("http://localhost/testpack.png"), true));
+			modpacks.add(new Modpack("Elfco SMP Modpack v14.0", new URL("http://localhost/testpack.png"), true));
 			modpacks.add(new Modpack("Test Modpack 2", new URL("http://localhost/testpack.png"), true));
 			modpacks.add(new Modpack("Test Modpack 3", new URL("http://localhost/testpack.png"), true));
 			modpacks.add(new Modpack("Test Modpack 4", new URL("http://localhost/testpack.png"), true));

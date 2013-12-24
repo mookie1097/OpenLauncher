@@ -33,11 +33,17 @@ public class RenderHelper {
 			do{
 				l = l + str[ch];
 				ch++;
-			}while(fm.stringWidth(l) < width && ch < s.length());
-			if(str[ch] == ' '){
-				ch++;
-			}else{
-				l += "-";
+			}while((fm.stringWidth(l) + (fm.getLeading()*l.length())) < width && ch < s.length());
+			if(str[ch - 1] == ' '){
+				l = l.substring(0, l.length() - 1);
+				ch--;
+			}
+			if(ch < s.length()){
+				if(str[ch] == ' '){
+					ch++;
+				}else{
+					l += "-";
+				}
 			}
 			list.add(l);
 		}while(ch < s.length());

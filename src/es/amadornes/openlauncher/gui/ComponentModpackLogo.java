@@ -85,14 +85,14 @@ public class ComponentModpackLogo extends Component {
 		g2d.fillRect(0, 0, width, height);
 		
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-		
-		text = RenderHelper.splitStringInLines(modpack.getName(), width - 5 - 5, g2d);
 
 		float fontDivider = 5;
 		float size = width / fontDivider;
 		
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(new Font("Arial", Font.PLAIN, (int)size));
+		
+		text = RenderHelper.splitStringInLines(modpack.getName(), width - 8 - 8, g2d);
 		
 		int strings = 0;
 		for(String s : text){

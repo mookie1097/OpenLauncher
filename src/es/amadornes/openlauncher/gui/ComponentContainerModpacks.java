@@ -14,7 +14,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 	
 	private Insets i = new Insets(10, 10, 10, 10);
 	private int border = 2;
-	private int packsPerRow = 5;//FIXME 7
+	private int packsPerRow = 7;
 	private int packSeparation = 10;
 	private float descriptionArea = 0.5F;
 	private Insets descriptionInsets = new Insets(10, 10, 10, 10);
