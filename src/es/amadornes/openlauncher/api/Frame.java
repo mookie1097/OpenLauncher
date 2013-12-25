@@ -130,6 +130,7 @@ public class Frame {
 	
 	private int lastMouseX = -1;
 	private int lastMouseY = -1;
+	public Component focus;
 	
 	private void addComponentListeners(){
 		screen.addMouseListener(new MouseListener() {
@@ -190,6 +191,23 @@ public class Frame {
 				if(c != null){
 					Point p = transport(c, ev.getX(), ev.getY());
 					c.onMouseWheelMove(p.x, p.y, ev.getScrollAmount());
+				}
+			}
+		});
+		screen.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {
+				if(focus != null){
+					focus.onKeyType(e.getKeyCode());
+				}
+			}
+			public void keyReleased(KeyEvent e) {
+				if(focus != null){
+					focus.onKeyUp(e.getKeyCode());
+				}
+			}
+			public void keyPressed(KeyEvent e) {
+				if(focus != null){
+					focus.onKeyDown(e.getKeyCode());
 				}
 			}
 		});

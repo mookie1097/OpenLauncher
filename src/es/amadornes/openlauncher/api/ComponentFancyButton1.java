@@ -48,6 +48,7 @@ public class ComponentFancyButton1 extends Component {
 							}
 						}
 						Thread.sleep(200/movement);
+						Thread.yield();
 					} catch (Exception e) {}
 				}
 			}

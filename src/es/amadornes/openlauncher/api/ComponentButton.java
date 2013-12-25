@@ -41,9 +41,7 @@ public class ComponentButton extends Component {
 			}
 		}
 		g.setPaint(c);
-		g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 2, 2);
-		g.fillRect(4, 4, getWidth() - 8, getHeight() - 8);
-		//g.drawRect(4, 4, getWidth() - 9, getHeight() - 9);
+		g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
 	}
 
 }

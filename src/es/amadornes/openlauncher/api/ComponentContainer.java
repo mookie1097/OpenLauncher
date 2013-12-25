@@ -72,7 +72,9 @@ public class ComponentContainer extends Component {
 		if(c != null){
 			Point p = transport(c, x, y);
 			c.onMouseUp(p.x, p.y, button);
+			return;
 		}
+		super.onMouseUp(x, y, button);
 	}
 	
 	private int lastMouseX = 0, lastMouseY = 0;

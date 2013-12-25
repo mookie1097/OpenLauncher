@@ -11,6 +11,7 @@ public class Modpack {
 	private BufferedImage logo;
 	private boolean isPublic;
 	private boolean unlocked;
+	private String description = "No description available.";
 	
 	public Modpack(String name, URL logo, boolean isPublic) {
 		this.name = name;
@@ -38,6 +39,14 @@ public class Modpack {
 	
 	public boolean isUnlocked() {
 		return unlocked;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setDescription(String desc) {
+		this.description = desc;
 	}
 	
 }

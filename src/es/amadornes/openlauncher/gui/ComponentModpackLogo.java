@@ -41,6 +41,7 @@ public class ComponentModpackLogo extends Component {
 							}
 						}
 						Thread.sleep(5);
+						Thread.yield();
 					} catch (Exception e) {}
 				}
 			}
@@ -67,7 +68,9 @@ public class ComponentModpackLogo extends Component {
 	
 	@Override
 	public void onMouseUp(int x, int y, int button) {
+		owner.slide = true;
 		owner.selected = modpack;
+		super.onMouseUp(x, y, button);
 	}
 	
 	@Override

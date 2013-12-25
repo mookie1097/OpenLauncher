@@ -6,6 +6,7 @@ public abstract class Component {
 	
 	protected int x, y, width, height;
 	private boolean overlap = true;
+	protected boolean canHaveFocus = false;
 	public Frame owner = null;
 	
 	public Component(int x, int y, int width, int height) {
@@ -58,7 +59,15 @@ public abstract class Component {
 	public void onClick(int x, int y, int button){}
 	
 	public void onMouseDown(int x, int y, int button){}
-	public void onMouseUp(int x, int y, int button){}
+	public void onMouseUp(int x, int y, int button){
+		if(owner != null){
+			if(canHaveFocus){
+				owner.focus = this;
+			}else{
+				owner.focus = null;
+			}
+		}
+	}
 	
 	public void onMouseMove(int x, int y){}
 	public void onMouseEnter(int x, int y){}

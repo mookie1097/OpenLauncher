@@ -15,7 +15,7 @@ public class OpenLaucher {
 	
 	public static GUI gui;
 	
-	public static boolean loggedIn = true;
+	public static boolean loggedIn = false;
 	public static String username = "amadornes";
 	public static Font font;
 	
@@ -23,7 +23,9 @@ public class OpenLaucher {
 	
 	public static void main(String[] args){
 		try {
-			modpacks.add(new Modpack("Elfco SMP Modpack v14.0", new URL("http://localhost/testpack.png"), true));
+			Modpack elfco = new Modpack("Elfco SMP Modpack v14.0", new URL("http://localhost/testpack.png"), true);
+			elfco.setDescription("This is a teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest. :D");
+			modpacks.add(elfco);
 			modpacks.add(new Modpack("Test Modpack 2", new URL("http://localhost/testpack.png"), true));
 			modpacks.add(new Modpack("Test Modpack 3", new URL("http://localhost/testpack.png"), true));
 			modpacks.add(new Modpack("Test Modpack 4", new URL("http://localhost/testpack.png"), true));

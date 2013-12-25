@@ -82,6 +82,7 @@ public class GUI extends Frame {
 		
 		//Render title
 		g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+		g.setColor(Color.BLACK);
 		RenderHelper.drawCenteredString("Open Launcher", 0, 0, width, insets.top, g2d);
 		
 		if(getTab() != null){
@@ -171,6 +172,8 @@ public class GUI extends Frame {
 			g.setPaint(Color.BLACK);
 			RenderHelper.drawCenteredString(username, i.left + 10, i.top + 20 + 160, 160, (Graphics)g);
 		}else{
+			g.setPaint(ColorScheme.active.titlebar);
+			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
 			//TODO NOT LOGGED IN
 		}
 	}

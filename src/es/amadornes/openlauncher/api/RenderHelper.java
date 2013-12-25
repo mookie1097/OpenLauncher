@@ -27,6 +27,11 @@ public class RenderHelper {
 		g.drawString(s, x, ny);
 	}
 	
+	public static int getStringLength(String s, Graphics g){
+		FontMetrics fm = g.getFontMetrics();
+		return fm.stringWidth(s);
+	}
+	
 	public static String[] splitStringInLines(String s, int width, Graphics g) {
 		FontMetrics fm = g.getFontMetrics();
 		char[] str = s.toCharArray();
