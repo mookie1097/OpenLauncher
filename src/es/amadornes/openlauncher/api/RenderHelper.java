@@ -21,6 +21,12 @@ public class RenderHelper {
 		g.drawString(s, nx, ny);
 	}
 	
+	public static void drawVerticallyCenteredString(String s, int x, int y, int height, Graphics g) {
+		FontMetrics fm = g.getFontMetrics();
+		int ny = y + ((fm.getAscent() - fm.getDescent() + height)/2);
+		g.drawString(s, x, ny);
+	}
+	
 	public static String[] splitStringInLines(String s, int width, Graphics g) {
 		FontMetrics fm = g.getFontMetrics();
 		char[] str = s.toCharArray();

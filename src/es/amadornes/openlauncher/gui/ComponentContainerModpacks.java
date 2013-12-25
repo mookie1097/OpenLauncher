@@ -1,6 +1,7 @@
 package es.amadornes.openlauncher.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -8,6 +9,7 @@ import java.awt.Insets;
 import es.amadornes.openlauncher.OpenLaucher;
 import es.amadornes.openlauncher.api.ComponentContainer;
 import es.amadornes.openlauncher.api.Frame;
+import es.amadornes.openlauncher.api.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
 
 public class ComponentContainerModpacks extends ComponentContainer {
@@ -87,6 +89,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 	@Override
 	public void render(Graphics g) {
 		renderBackground(g);
+		renderModpackInfoTab(g);
 		float description = progress;
 		description /= 100;
 		description *= descriptionArea;
@@ -109,6 +112,30 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		g2d.fillRect(width - border, 0, border, height);
 		g2d.fillRect(0, height - ((int)description) - border, width, (int)description + border);
 		//g2d.fillRect(0, 0, width, height);
+	}
+	
+	protected void renderModpackInfoTab(Graphics gr){
+		float description = progress;
+		description /= 100;
+		description *= descriptionArea;
+		description *= height;
+		
+		Graphics g = gr.create(descriptionInsets.left, height - ((int)description) - border + descriptionInsets.top, width - descriptionInsets.left - descriptionInsets.right, (int)description + border - descriptionInsets.top - descriptionInsets.bottom);
+		Graphics2D g2d = (Graphics2D) g;
+		
+		int width = g2d.getClipBounds().width;
+		int finalHeight = (int) ((height * descriptionArea) + border - descriptionInsets.top - descriptionInsets.bottom);
+		int height = g2d.getClipBounds().height;
+		
+		try{
+			g2d.drawImage(selected.getLogo(), 0, 0, finalHeight, finalHeight, null);
+
+			g2d.setColor(Color.BLACK);
+			int tSize = 36;
+			g2d.setFont(new Font("Arial", Font.PLAIN, tSize));
+			RenderHelper.drawVerticallyCenteredString(selected.getName(), finalHeight + 15, 0, tSize, g2d);
+		}catch(Exception e){}
+		
 	}
 
 }
