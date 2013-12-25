@@ -15,7 +15,7 @@ public class OpenLaucher {
 	
 	public static GUI gui;
 	
-	public static boolean loggedIn = false;
+	public static boolean loggedIn = true;
 	public static String username = "amadornes";
 	public static Font font;
 	
@@ -23,28 +23,13 @@ public class OpenLaucher {
 	
 	public static void main(String[] args){
 		try {
-			Modpack elfco = new Modpack("Elfco SMP Modpack v14.0", new URL("http://localhost/testpack.png"), true);
+			Modpack elfco = new Modpack("Elfco SMP Modpack v14.0", new URL("http://wallpaperswa.com/thumbnails/detail/20120401/minecraft%201024x1024%20wallpaper_www.wallpaperhi.com_13.jpg"), true);
 			elfco.setDescription("This is a teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\neeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest. :D");
 			modpacks.add(elfco);
-			modpacks.add(new Modpack("Test Modpack 2", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 3", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 4", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 5", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 6", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 7", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 8", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 9", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 10", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 11", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 12", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 13", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 14", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 15", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 16", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 17", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 18", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 19", new URL("http://localhost/testpack.png"), true));
-			modpacks.add(new Modpack("Test Modpack 20", new URL("http://localhost/testpack.png"), true));
+			modpacks.add(new Modpack("Test Modpack 2", new URL("http://www.wallsave.com/wallpapers/1024x1024/minecraft-hd/54338/minecraft-hd-ipod-iphone-ipad-and-54338.jpg"), true));
+			modpacks.add(new Modpack("Test Modpack 3", new URL("http://www.wallsave.com/wallpapers/1024x1024/minecraft-hd/54338/minecraft-hd-ipod-iphone-ipad-and-54338.jpg"), true));
+			modpacks.add(new Modpack("Test Modpack 4", new URL("http://www.wallsave.com/wallpapers/1024x1024/minecraft-hd/54338/minecraft-hd-ipod-iphone-ipad-and-54338.jpg"), true));
+			modpacks.add(new Modpack("Test Modpack 5", new URL("http://www.wallsave.com/wallpapers/1024x1024/minecraft-hd/54338/minecraft-hd-ipod-iphone-ipad-and-54338.jpg"), true));
 		} catch (Exception e) {}
 		
 		try {
