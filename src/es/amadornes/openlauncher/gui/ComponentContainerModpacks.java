@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.amadornes.openlauncher.OpenLauncher;
-import es.amadornes.openlauncher.api.ComponentContainer;
-import es.amadornes.openlauncher.api.Frame;
-import es.amadornes.openlauncher.api.RenderHelper;
+import es.amadornes.openlauncher.api.gui.ComponentContainer;
+import es.amadornes.openlauncher.api.gui.Frame;
+import es.amadornes.openlauncher.api.gui.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
 
 public class ComponentContainerModpacks extends ComponentContainer {
@@ -158,7 +158,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 			RenderHelper.drawVerticallyCenteredString(selected.getName(), finalHeight + 15, 0, tSize, g2d);
 
 			g2d.setFont(new Font("Arial", Font.PLAIN, aSize));
-			RenderHelper.drawVerticallyCenteredString(selected.getCreator(), finalHeight + 15, tSize + 5, aSize, g2d);
+			RenderHelper.drawVerticallyCenteredString("Author: " + selected.getAuthor(), finalHeight + 15, tSize + 5, aSize, g2d);
 			
 			g2d.setFont(new Font("Arial", Font.PLAIN, dSize));
 			String[] desc = RenderHelper.splitStringInLines(selected.getDescription(), width - finalHeight - 15, g2d);

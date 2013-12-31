@@ -1,4 +1,4 @@
-package es.amadornes.openlauncher.api;
+package es.amadornes.openlauncher.api.gui;
 
 import java.util.Comparator;
 import java.util.Map;

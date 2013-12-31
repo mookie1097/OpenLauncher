@@ -6,16 +6,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import es.amadornes.openlauncher.OpenLauncher;
-import es.amadornes.openlauncher.api.Component;
-import es.amadornes.openlauncher.api.RenderHelper;
+import es.amadornes.openlauncher.api.gui.Component;
+import es.amadornes.openlauncher.api.gui.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
 
 public class ComponentModpackLogo extends Component {
 	
 	private Modpack modpack;
-	
-	private Modpack actualModpack;
 	
 	private int progress = 0;
 	
@@ -74,9 +71,13 @@ public class ComponentModpackLogo extends Component {
 			owner.slide = true;
 			owner.selected = modpack;
 			super.onMouseUp(x, y, button);
-		} else {
-			owner.slide = false;
+		} else if(owner.slide == true && owner.selected != modpack) {
+			// TODO: Slide to a side (depending on Modpack position) to change actual Modpack
+			owner.slide = true;
 			owner.selected = modpack;
+			super.onMouseUp(x, y, button);
+		} else if(owner.slide == true && owner.selected == modpack) {
+			owner.slide = false;
 			super.onMouseUp(x, y, button);
 		}
 	}

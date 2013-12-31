@@ -1,7 +1,7 @@
 package es.amadornes.openlauncher.gui;
 
-import es.amadornes.openlauncher.api.ComponentContainer;
-import es.amadornes.openlauncher.api.Frame;
+import es.amadornes.openlauncher.api.gui.ComponentContainer;
+import es.amadornes.openlauncher.api.gui.Frame;
 
 public abstract class Tab extends ComponentContainer {
 

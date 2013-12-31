@@ -17,10 +17,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import es.amadornes.openlauncher.OpenLauncher;
-import es.amadornes.openlauncher.api.ColorScheme;
-import es.amadornes.openlauncher.api.Component;
-import es.amadornes.openlauncher.api.Frame;
-import es.amadornes.openlauncher.api.RenderHelper;
+import es.amadornes.openlauncher.api.gui.ColorScheme;
+import es.amadornes.openlauncher.api.gui.Component;
+import es.amadornes.openlauncher.api.gui.Frame;
+import es.amadornes.openlauncher.api.gui.RenderHelper;
 
 public class GUI extends Frame {
 	
@@ -174,7 +174,7 @@ public class GUI extends Frame {
 		}else{
 			g.setPaint(ColorScheme.active.titlebar);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
-			//TODO NOT LOGGED IN
+			//TODO: If user is not logged in
 		}
 	}
 	
