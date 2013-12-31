@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import es.amadornes.openlauncher.util.OSUtils;
+
 public class LastLogin {
 
 	public static String LOGIN = "";
@@ -14,7 +16,7 @@ public class LastLogin {
 	public static String CLIENT_TOKEN = "";
 	
 	public static void tryLoading(){
-		File f = new File(OpenLauncher.getWorkingDirectory(), "lastLogin.dat");
+		File f = new File(OSUtils.getWorkingDirectory(), "lastLogin.dat");
 		
 		FileReader fr = null;
 		BufferedReader br = null;
@@ -37,7 +39,7 @@ public class LastLogin {
 	}
 	
 	public static void save(){
-		File f = new File(OpenLauncher.getWorkingDirectory(), "lastLogin.dat");
+		File f = new File(OSUtils.getWorkingDirectory(), "lastLogin.dat");
 		f.delete();
 		PrintWriter pw = null;
 		try {
