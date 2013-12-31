@@ -3,7 +3,7 @@ package es.amadornes.openlauncher.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import es.amadornes.openlauncher.OpenLaucher;
+import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.RenderHelper;
 
 public class TabModpacks extends Tab {
@@ -15,7 +15,7 @@ public class TabModpacks extends Tab {
 
 	@Override
 	protected void renderBackground(Graphics g) {
-		g.setFont(OpenLaucher.font.deriveFont(64F));
+		g.setFont(OpenLauncher.font.deriveFont(64F));
 		g.setColor(Color.BLACK);
 		RenderHelper.drawCenteredString("Modpacks", 0, 30, getWidth(), g);
 	}

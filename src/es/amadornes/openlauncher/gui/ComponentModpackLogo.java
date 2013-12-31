@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import es.amadornes.openlauncher.OpenLaucher;
+import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.Component;
 import es.amadornes.openlauncher.api.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
@@ -14,6 +14,8 @@ import es.amadornes.openlauncher.modpack.Modpack;
 public class ComponentModpackLogo extends Component {
 	
 	private Modpack modpack;
+	
+	private Modpack actualModpack;
 	
 	private int progress = 0;
 	
@@ -68,9 +70,15 @@ public class ComponentModpackLogo extends Component {
 	
 	@Override
 	public void onMouseUp(int x, int y, int button) {
-		owner.slide = true;
-		owner.selected = modpack;
-		super.onMouseUp(x, y, button);
+		if(owner.slide == false) {
+			owner.slide = true;
+			owner.selected = modpack;
+			super.onMouseUp(x, y, button);
+		} else {
+			owner.slide = false;
+			owner.selected = modpack;
+			super.onMouseUp(x, y, button);
+		}
 	}
 	
 	@Override

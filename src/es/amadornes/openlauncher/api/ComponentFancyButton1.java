@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import es.amadornes.openlauncher.OpenLaucher;
+import es.amadornes.openlauncher.OpenLauncher;
 
 public class ComponentFancyButton1 extends Component {
 
@@ -137,7 +137,7 @@ public class ComponentFancyButton1 extends Component {
 		g.translate(0, 1);
 		
 		
-		g.setFont(OpenLaucher.font.deriveFont(Font.BOLD, 18F));
+		g.setFont(OpenLauncher.font.deriveFont(Font.BOLD, 18F));
 		g.setPaint(Color.BLACK);
 		RenderHelper.drawCenteredString(text, (int)(width*0.125), (int) (height*0.45), width, (Graphics)g);
 	}

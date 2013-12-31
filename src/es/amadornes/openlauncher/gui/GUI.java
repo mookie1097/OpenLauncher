@@ -16,7 +16,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import es.amadornes.openlauncher.OpenLaucher;
+import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.ColorScheme;
 import es.amadornes.openlauncher.api.Component;
 import es.amadornes.openlauncher.api.Frame;
@@ -138,12 +138,12 @@ public class GUI extends Frame {
 		
 		
 		//Render image rectangle
-		if(OpenLaucher.loggedIn){
+		if(OpenLauncher.loggedIn){
 			g.setPaint(Color.BLACK);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
 			
-			String username = OpenLaucher.username;
-			Font f = OpenLaucher.font.deriveFont(Font.BOLD, 36);
+			String username = OpenLauncher.username;
+			Font f = OpenLauncher.font.deriveFont(Font.BOLD, 36);
 			
 			try {
 				BufferedImage img = ImageIO.read(new URL("https://minotar.net/avatar/" + username + "/150.png"));

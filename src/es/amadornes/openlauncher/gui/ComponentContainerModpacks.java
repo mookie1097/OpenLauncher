@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
-import es.amadornes.openlauncher.OpenLaucher;
+import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.ComponentContainer;
 import es.amadornes.openlauncher.api.Frame;
 import es.amadornes.openlauncher.api.RenderHelper;
@@ -41,6 +43,9 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		return height;
 	}
 	
+	private int pack = 0;
+	private List<Modpack> added = new ArrayList<Modpack>();
+	
 	public ComponentContainerModpacks(int x, int y, int width, int height, Frame owner) {
 		super(x, y, width, height, owner);
 		
@@ -50,7 +55,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		
 		int shownPacks = 0;
 
-		for(Modpack m : OpenLaucher.modpacks){
+		for(Modpack m : OpenLauncher.modpacks){
 			if(m.isPublic() || m.isUnlocked()){
 				shownPacks++;
 			}
@@ -58,13 +63,23 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		
 		needsScroll = (i.top + i.bottom + (border * 2) + ((packSeparation + this.logoWidth) * (((int)(Math.floor(shownPacks/packsPerRow) + 1)) / ((progress/100) * (1F - descriptionArea))))) > height;
 		
-		int pack = 0;
-		for(Modpack m : OpenLaucher.modpacks){
-			if(m.isPublic() || m.isUnlocked()){
-				addComponent(new ComponentModpackLogo(i.left + border + ((packSeparation + this.logoWidth) * ((pack%packsPerRow))), i.top + border + ((packSeparation + this.logoWidth) * ((int)(Math.floor(pack/packsPerRow)))), this.logoWidth, m, this));
-				pack++;
+		final ComponentContainerModpacks me = this;
+		new Thread(new Runnable() {
+			public void run() {
+				while(true){
+					for(Modpack m : OpenLauncher.modpacks){
+						if(!added.contains(m)){
+							if(m.isPublic() || m.isUnlocked()){
+								addComponent(new ComponentModpackLogo(i.left + border + ((packSeparation + me.logoWidth) * ((pack%packsPerRow))), i.top + border + ((packSeparation + me.logoWidth) * ((int)(Math.floor(pack/packsPerRow)))), me.logoWidth, m, me));
+								pack++;
+								added.add(m);
+							}
+						}
+					}
+					try {Thread.sleep(500);} catch (Exception e) {}
+				}
 			}
-		}
+		}).start();
 		
 		new Thread(new Runnable() {
 			public void run() {
@@ -138,13 +153,18 @@ public class ComponentContainerModpacks extends ComponentContainer {
 			g2d.setColor(Color.BLACK);
 			int tSize = 36;
 			int dSize = 18;
+			int aSize = 12;
 			g2d.setFont(new Font("Arial", Font.PLAIN, tSize));
 			RenderHelper.drawVerticallyCenteredString(selected.getName(), finalHeight + 15, 0, tSize, g2d);
+
+			g2d.setFont(new Font("Arial", Font.PLAIN, aSize));
+			RenderHelper.drawVerticallyCenteredString(selected.getCreator(), finalHeight + 15, tSize + 5, aSize, g2d);
+			
 			g2d.setFont(new Font("Arial", Font.PLAIN, dSize));
 			String[] desc = RenderHelper.splitStringInLines(selected.getDescription(), width - finalHeight - 15, g2d);
 			int line = 0;
 			for(String s : desc){
-				RenderHelper.drawVerticallyCenteredString(s, finalHeight + 15, tSize + 10 + ((dSize + 7)*line), tSize, g2d);
+				RenderHelper.drawVerticallyCenteredString(s, finalHeight + 15, tSize + aSize + 5 + 5 + ((dSize + 7)*line), tSize, g2d);
 				line++;
 			}
 		}catch(Exception e){}

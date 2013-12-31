@@ -12,6 +12,7 @@ public class Modpack {
 	private boolean isPublic;
 	private boolean unlocked;
 	private String description = "No description available.";
+	private String creator = "Unknown";
 	
 	public Modpack(String name, URL logo, boolean isPublic) {
 		this.name = name;
@@ -47,6 +48,14 @@ public class Modpack {
 	
 	public void setDescription(String desc) {
 		this.description = desc;
+	}
+	
+	public String getCreator() {
+		return creator;
+	}
+	
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 	
 }

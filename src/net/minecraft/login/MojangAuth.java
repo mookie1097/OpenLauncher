@@ -11,7 +11,7 @@ public class MojangAuth {
 	
 	public static Map<String, String> authenticate(String username, String password) throws Exception{
 		Map<String, String> result = new HashMap<String, String>();
-		String request = "{\"agent\": {\"name\": \"Minecraft\",\"version\": 1 },\"username\": \"" + username + "\",\"password\": \"" + password + "\",}";
+		String request = "{\"agent\": {\"name\": \"Minecraft\",\"version\": 1 },\"username\": \"" + username + "\",\"password\": \"" + password + "\"}";
 		String response = NetAPI.sendPost(server + "/authenticate", request);
 		
 		JSONObject json = new JSONObject(response);
@@ -24,11 +24,13 @@ public class MojangAuth {
 		return result;
 	}
 	
-	public static boolean isValid(String accessToken) throws Exception{
-		String request = "{\"accessToken\": \"" + accessToken + "\",}";
-		String response = NetAPI.sendPost(server + "/validate", request);
-		if(response == null || response.trim() == "")
-			return true;
+	public static boolean isValid(String accessToken){
+		try{
+			String request = "{\"accessToken\": \"" + accessToken + "\"}";
+			String response = NetAPI.sendPost(server + "/validate", request);
+			if(response == null || response.trim() == "")
+				return true;
+		}catch(Exception e){}
 		return false;
 	}
 	
