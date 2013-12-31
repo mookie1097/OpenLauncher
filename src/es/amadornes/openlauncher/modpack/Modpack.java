@@ -19,6 +19,11 @@ public class Modpack {
 	private String versionString = "0.0.0";
 	private String mcVersion = "1.6.4";
 	
+	@Override
+	public String toString() {
+		return "{id=" + id + ";name=" + name + ";hasLogo=" + (logo != null) + ";private=" + isPrivate + (isPrivate ? (";unlocked=" + unlocked) : "") + ";author=" + author + ";version=" + version + ";versionString=" + versionString + ";mcversion=" + mcVersion + "}";
+	}
+	
 	public Modpack(String id, String name, URL logo, String author, boolean isPrivate, int version, String versionString, String mcVersion, String serverID) {
 		this.id = id;
 		this.name = name;
@@ -88,9 +93,8 @@ public class Modpack {
 		return author;
 	}
 	
-	@Override
-	public String toString() {
-		return "{id=" + id + ";name=" + name + ";hasLogo=" + (logo != null) + ";private=" + isPrivate + (isPrivate ? (";unlocked=" + unlocked) : "") + ";author=" + author + ";version=" + version + ";versionString=" + versionString + ";mcversion=" + mcVersion + "}";
+	public void play(){
+		
 	}
 	
 }

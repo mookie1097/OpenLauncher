@@ -1,5 +1,8 @@
 package es.amadornes.openlauncher.server;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -8,9 +11,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.gui.server.DownloadServer;
 import es.amadornes.openlauncher.modpack.Modpack;
+import es.amadornes.openlauncher.util.Downloader;
 import es.amadornes.openlauncher.util.JSONUtils;
+import es.amadornes.openlauncher.util.Util;
+import es.amadornes.openlauncher.util.ZipUtils;
 
 public class DownloadServerAmadornes extends DownloadServer {
 	
@@ -47,7 +54,7 @@ public class DownloadServerAmadornes extends DownloadServer {
 			con.connect();
 			JSONObject data = JSONUtils.getJSONObjectFromInputStream(con.getInputStream());
 			
-			String id = pack;
+			String id = this.id + "_" + pack;
 			String name = data.getString("name");
 			String author = data.getString("author");
 			int versionid = data.getInt("versionid");
@@ -85,7 +92,51 @@ public class DownloadServerAmadornes extends DownloadServer {
 
 	@Override
 	public void updatePack(String pack, int version) {
+		boolean installed = Util.isPackInstalled(this.id, pack);
+		JSONObject data = Util.getPackData(this.id, pack);
+		Modpack modpack = OpenLauncher.getPack(this.id, pack);
+		File pdf = Util.getPackDataFile(this.id, pack);
 		
+		int localVersion = 0;
+		if(installed){
+			localVersion = data.getInt("versionid");
+		}
+		
+		for(int i = localVersion + 1; i <= modpack.getVersion(); i++){
+			try{
+				URL zipURL = new URL(serverURL + "modpacks/" + pack + "/versions/" + i + ".zip");
+				File zip = new File(Util.getDownloadsFolder(), this.id + "_" + pack + "/" + i + ".zip");
+				File dest = new File(Util.getInstancesFolder(), this.id + "_" + pack + "/");
+				
+				Downloader.download(zipURL, zip);
+				ZipUtils.unzip(zip.getAbsolutePath(), dest.getAbsolutePath());
+				
+				File delFile = new File(dest, "deleted.json");
+				
+				if(delFile.exists()){
+					JSONArray files = JSONUtils.getJSONArrayFromInputStream(new FileInputStream(delFile));
+					for(int i2 = 0; i2 < files.length(); i2++){
+						File f = new File(dest, files.getString(i2));
+						if(f.exists())
+							f.delete();
+					}
+				}
+				
+				zip.delete();
+				
+				JSONObject packdata = JSONUtils.getJSONObjectFromInputStream(new FileInputStream(pdf));
+				packdata.put("versionid", i);
+				
+				pdf.delete();
+				pdf.createNewFile();
+				
+				FileWriter w = new FileWriter(pdf);
+				packdata.write(w);
+				w.close();
+			}catch(Exception e){
+				System.err.println("There was an error updating \"" + pack + "\" from the server \"" + this.id + "\". Contact a server admin to help you.");
+				break;
+			} 
+		}
 	}
-
 }

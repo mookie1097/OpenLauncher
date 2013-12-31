@@ -14,6 +14,7 @@ import es.amadornes.openlauncher.gui.TabNews;
 import es.amadornes.openlauncher.gui.TabSettings;
 import es.amadornes.openlauncher.modpack.Modpack;
 import es.amadornes.openlauncher.server.DownloadServerAmadornes;
+import es.amadornes.openlauncher.util.Util;
 
 /**
  * OpenLauncher
@@ -39,6 +40,8 @@ public class OpenLauncher {
 	
 	public static void main(String[] args){
 		
+		preInit();
+		
 		/* Try to set Pixel font, if fails, set Arial */
 		try {
 			InputStream fontstream = OpenLauncher.class.getResourceAsStream("/font/pixel.ttf");
@@ -60,6 +63,8 @@ public class OpenLauncher {
 		gui.addComponent(new ComponentFancyButton1(29 - gui.insets.left, 659 - gui.insets.top, 150, 40,					"Settings").setTab(3));
 		gui.addTab(new TabSettings(gui), 3);
 		
+		init();
+		
 		/* Center and show the GUI */
 		gui.center();
 		gui.show();
@@ -67,22 +72,45 @@ public class OpenLauncher {
 		/* Load Modpacks */
 		loadModpacks();
 		
+		postInit();
 	}
 	
-	public static void loadModpacks(){ new Thread(new Runnable() {public void run() {
+	public static void loadModpacks() { new Thread(new Runnable() { public void run() {
 		
-		for(DownloadServer sv : servers){
+		for(DownloadServer sv : servers) {
 			String[] packs = sv.getAvailablePacks();
-			for(String id : packs){
+			for(String id : packs) {
 				Modpack p = sv.getPack(id);
-				if(p != null){
+				if(p != null) {
 					modpacks.add(p);
-				}else{
+				} else {
 					System.err.println("An error occoured while download information about the pack \"" + id + "\" from the server \"" + sv.getServerID() + "\"");
 				}
 			}
 		}
 		
 	}}).start();}
+	
+	private static void preInit(){
+		/* Create "openlauncher" data directory */
+		Util.getWorkingDirectory().mkdirs();
+		Util.getInstancesFolder().mkdirs();
+		Util.getDownloadsFolder().mkdirs();
+	}
+	
+	private static void init(){
+		
+	}
+	
+	private static void postInit(){
+		
+	}
+	
+	public static Modpack getPack(String server, String id){
+		for(Modpack m : modpacks)
+			if(m.getId().equals(server + "_" + id))
+				return m;
+		return null;
+	}
 	
 }

@@ -174,7 +174,7 @@ public class GUI extends Frame {
 		}else{
 			g.setPaint(ColorScheme.active.titlebar);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
-			//TODO: If user is not logged in
+			//TODO: If user is not logged in show Login form
 		}
 	}
 	

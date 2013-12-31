@@ -1,8 +1,11 @@
 package es.amadornes.openlauncher.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 
-public class OSUtils {
+import org.json.JSONObject;
+
+public class Util {
 	
 	public static String APP_NAME = "openlauncher";
 	
@@ -51,8 +54,28 @@ public class OSUtils {
 		return new File(getWorkingDirectory(), "instances/");
 	}
 	
-	public static File getVersionsFolder(){
-		return new File(getWorkingDirectory(), "versions/");
+	public static File getDownloadsFolder(){
+		return new File(getWorkingDirectory(), "downloads/");
+	}
+	
+	public static boolean isPackInstalled(String server, String packid){
+		return new File(getInstancesFolder(), server + "_" + packid + "/").exists();
+	}
+	
+	public static JSONObject getPackData(String server, String packid){
+		try{
+			File f = new File(getInstancesFolder(), server + "_" + packid + "/pack.json");
+			FileInputStream fis = new FileInputStream(f);
+			return JSONUtils.getJSONObjectFromInputStream(fis);
+		}catch(Exception e){}
+		return null;
+	}
+	
+	public static File getPackDataFile(String server, String packid){
+		try{
+			return new File(getInstancesFolder(), server + "_" + packid + "/pack.json");
+		}catch(Exception e){}
+		return null;
 	}
 	
 }
