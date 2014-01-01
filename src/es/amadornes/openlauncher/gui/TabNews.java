@@ -10,6 +10,7 @@ public class TabNews extends Tab {
 
 	public TabNews(GUI owner) {
 		super(0, 0, 0, 0, owner);
+		addComponent(new ComponentContainerWebsite(20, 80, getWidth() - 20 - 20, getHeight() - 80 - 20, owner, "http://pc.amadornes.es/openlauncher/news.php"));
 	}
 
 	@Override

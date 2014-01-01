@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 
 import org.json.JSONObject;
 
+import es.amadornes.openlauncher.modpack.Modpack;
+
 public class Util {
 	
 	public static String APP_NAME = "openlauncher";
@@ -58,10 +60,6 @@ public class Util {
 		return new File(getWorkingDirectory(), "downloads/");
 	}
 	
-	public static boolean isPackInstalled(String server, String packid){
-		return new File(getInstancesFolder(), server + "_" + packid + "/").exists();
-	}
-	
 	public static JSONObject getPackData(String server, String packid){
 		try{
 			File f = new File(getInstancesFolder(), server + "_" + packid + "/pack.json");
@@ -75,6 +73,15 @@ public class Util {
 		try{
 			return new File(getInstancesFolder(), server + "_" + packid + "/pack.json");
 		}catch(Exception e){}
+		return null;
+	}
+	
+	public static Modpack getModpackFromLocalInfo(String server, String packid){
+		JSONObject data = getPackData(server, packid);
+		if(data != null){
+			Modpack pack = new Modpack(packid, null, null, null, false, data.getInt("versionid"), data.getString("version"), null, server);
+			return pack;
+		}
 		return null;
 	}
 	

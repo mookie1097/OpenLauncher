@@ -1,12 +1,14 @@
 package es.amadornes.openlauncher.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -44,10 +47,10 @@ public class GUI extends Frame {
 	
 	public GUI(int width, int height) {
 		super(width, height);
-		insets = new Insets(30, 7, 7, 7);
+		frame.setMinimumSize(new Dimension(900, 600));
 		
-		user.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-		pass.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		user.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), BorderFactory.createEmptyBorder(0, 4, 0, 4)));
+		pass.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), BorderFactory.createEmptyBorder(0, 4, 0, 4)));
 		
 		frame.add(user);
 		frame.add(pass);
@@ -123,6 +126,18 @@ public class GUI extends Frame {
 	}
 	
 	@Override
+	public void setTab(int tab){
+		int old = this.tab;
+		super.setTab(tab);
+		for(JComponent c : getTabs().get(old).jcomponents){
+			frame.remove(c);
+		}
+		for(JComponent c : getTabs().get(tab).jcomponents){
+			frame.add(c);
+		}
+	}
+	
+	@Override
 	protected synchronized void render(Graphics g) {
 		super.render(g);
 		
@@ -140,13 +155,7 @@ public class GUI extends Frame {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setPaint(ColorScheme.active.background);
 		g2d.fillRect(0, 0, width, height);
-		renderFrame(g2d);
 		renderSidebar(g2d);
-		
-		//Render title
-		g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-		g.setColor(Color.BLACK);
-		RenderHelper.drawCenteredString("Open Launcher", 0, 0, width, insets.top, g2d);
 		
 		if(getTab() != null){
 			getTab().render((Graphics2D) g2d.create(insets.left + 170 + 6, insets.top, width - insets.left - 170 - 6 - insets.right, height - insets.top - insets.bottom));
@@ -167,6 +176,15 @@ public class GUI extends Frame {
 		
 		//Render buttons
 		renderButtons(g);
+		
+		//Render grip
+		g.setPaint(ColorScheme.active.titlebar);
+		Polygon grip = new Polygon();
+		grip.addPoint(width - insets.right - 20, height - insets.bottom);
+		grip.addPoint(width - insets.right, height - insets.bottom);
+		grip.addPoint(width - insets.right, height - insets.bottom - 20);
+		g.fillPolygon(grip);
+		
 	}
 	private synchronized void renderButtons(Graphics2D g){
 		Insets i = insets;
@@ -237,7 +255,6 @@ public class GUI extends Frame {
 		}else{
 			g.setPaint(ColorScheme.active.titlebar);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
-			//TODO: If user is not logged in show Login form
 		}
 	}
 	

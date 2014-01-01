@@ -8,7 +8,7 @@ import java.util.Map;
 
 import net.minecraft.login.MojangAuth;
 import es.amadornes.openlauncher.api.gui.ComponentFancyButton;
-import es.amadornes.openlauncher.api.gui.server.DownloadServer;
+import es.amadornes.openlauncher.api.server.DownloadServer;
 import es.amadornes.openlauncher.gui.GUI;
 import es.amadornes.openlauncher.gui.TabConsole;
 import es.amadornes.openlauncher.gui.TabModpacks;
@@ -58,14 +58,16 @@ public class OpenLauncher {
 		gui = new GUI(1280, 720);
 		
 		/* Add sidebar Tabs */
-		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, 659 - gui.insets.top - 45 - 45 - 45, 150, 40, "News").setSelected(true));
+		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45 - 45 - 45, 150, 40, "News").setSelected(true));
 		gui.addTab(new TabNews(gui), 0);
-		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, 659 - gui.insets.top - 45 - 45, 150, 40, "Modpacks").setTab(1));
+		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45 - 45, 150, 40, "Modpacks").setTab(1));
 		gui.addTab(new TabModpacks(gui), 1);
-		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, 659 - gui.insets.top - 45, 150, 40, "Console").setTab(2));
+		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45, 150, 40, "Console").setTab(2));
 		gui.addTab(new TabConsole(gui), 2);
-		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, 659 - gui.insets.top, 150, 40,	"Settings").setTab(3));
+		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top, 150, 40,	"Settings").setTab(3));
 		gui.addTab(new TabSettings(gui), 3);
+		
+		gui.setTab(0);
 		
 		init();
 		
@@ -117,8 +119,15 @@ public class OpenLauncher {
 	
 	public static Modpack getPack(String server, String id){
 		for(Modpack m : modpacks)
-			if(m.getId().equals(server + "_" + id))
+			if(m.getId().equals(id) && m.getServerID().equals(server))
 				return m;
+		return null;
+	}
+	
+	public static DownloadServer getServer(String server){
+		for(DownloadServer s : servers)
+			if(s.getServerID().equals(server))
+				return s;
 		return null;
 	}
 	

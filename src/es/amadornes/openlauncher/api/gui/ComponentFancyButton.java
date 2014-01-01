@@ -86,7 +86,7 @@ public class ComponentFancyButton extends Component {
 					((ComponentFancyButton)c).selected = false;
 				}
 			}
-			owner.tab = tab;
+			owner.setTab(tab);
 		}
 		selected = true;
 	}

@@ -9,11 +9,14 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.gui.ComponentContainer;
 import es.amadornes.openlauncher.api.gui.Frame;
 import es.amadornes.openlauncher.api.gui.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
+import es.amadornes.openlauncher.util.Util;
 
 public class ComponentContainerModpacks extends ComponentContainer {
 	
@@ -31,8 +34,8 @@ public class ComponentContainerModpacks extends ComponentContainer {
 	public Modpack selected = null;
 	public boolean slide = false;
 	
-	private float scroll = 0;
-	private boolean needsScroll = false;
+	//private float scroll = 0;
+	//private boolean needsScroll = false;
 	
 	@Override
 	public int getWidth() {
@@ -54,7 +57,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		logoWidth /= packsPerRow;
 		this.logoWidth = (int) logoWidth;
 		
-		int shownPacks = 0;
+		/*int shownPacks = 0;
 
 		for(Modpack m : OpenLauncher.modpacks){
 			if(m.isPublic() || m.isUnlocked()){
@@ -62,7 +65,8 @@ public class ComponentContainerModpacks extends ComponentContainer {
 			}
 		}
 		
-		needsScroll = (i.top + i.bottom + (border * 2) + ((packSeparation + this.logoWidth) * (((int)(Math.floor(shownPacks/packsPerRow) + 1)) / ((progress/100) * (1F - descriptionArea))))) > height;
+		// TODO: Add scroll
+		needsScroll = (i.top + i.bottom + (border * 2) + ((packSeparation + this.logoWidth) * (((int)(Math.floor(shownPacks/packsPerRow) + 1)) / ((progress/100) * (1F - descriptionArea))))) > height;*/
 		
 		final ComponentContainerModpacks me = this;
 		new Thread(new Runnable() {
@@ -181,6 +185,36 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		g2d.setColor(Color.RED);
 		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		RenderHelper.drawCenteredString("x", width - 10, 0, 10, 10, g2d);
+		
+		if(selected != null){
+			//Render play/download buttons
+			{
+				int bw = 120;
+				int bh = 30;
+				int xC = (int) (g.getClipBounds().getWidth() - bw - 5);
+				int yC =  (int) (finalHeight - bh - 5);
+
+				g2d.setPaint(new Color(Color.LIGHT_GRAY.getRed() + 40, Color.LIGHT_GRAY.getGreen() + 40, Color.LIGHT_GRAY.getBlue() + 40));
+				g2d.fillRect(xC, yC, bw, bh);
+				g2d.setPaint(Color.GRAY);
+				g2d.drawRect(xC, yC, bw, bh);
+				
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+				
+				if(selected.hasDownloaded()){
+					RenderHelper.drawCenteredString("Play", xC, yC, bw, bh, g2d);
+				}else{
+					RenderHelper.drawCenteredString("Download", xC, yC, bw, bh, g2d);
+					if(true){
+						g2d.setPaint(new Color(Color.LIGHT_GRAY.getRed() + 40, Color.LIGHT_GRAY.getGreen() + 40, Color.LIGHT_GRAY.getBlue() + 40));
+						g2d.fillRect(xC - bw - 10, yC, bw, bh);
+						g2d.setPaint(Color.GRAY);
+						g2d.drawRect(xC - bw - 10, yC, bw, bh);
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -190,12 +224,41 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		description *= descriptionArea;
 		description *= height;
 		int width = this.width - i.left - (border*2);
+		int finalHeight = (int) ((height * descriptionArea) + border - descriptionInsets.top - descriptionInsets.bottom);
+		System.out.println("FH Click: " + finalHeight);
+		
+		int bw = 120;
+		int bh = 30;
+		int xC = (int) (width - bw - 5);
+		int yC =  (int) (height - bh - 5);
 		
 		if(slide){
 			if(x >= (width - 15) && x < width){
 				if(y >= (height - ((int)description) - border + descriptionInsets.top) && y < (height - ((int)description) - border + descriptionInsets.top + 10)){
 					slide = false;
 					return;
+				}
+			}
+			
+			if(selected != null){
+				if(x >= xC && x < (xC + bw)){
+					if(y >= yC && y < (yC + bh)){//Click button on the right
+						if(selected.hasDownloaded()){
+							selected.play();
+						}else{
+							new Thread(new Runnable() {
+								public void run() {
+									OpenLauncher.getServer(selected.getServerID()).updatePack(selected.getId());
+									try{
+										JSONObject obj = Util.getPackData(selected.getServerID(), selected.getId());
+										if(obj != null){
+											selected.setDownloaded();
+										}
+									}catch(Exception e){}
+								}
+							}).start();
+						}
+					}
 				}
 			}
 		}

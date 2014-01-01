@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import es.amadornes.openlauncher.OpenLauncher;
-import es.amadornes.openlauncher.api.gui.server.DownloadServer;
+import es.amadornes.openlauncher.api.server.DownloadServer;
 import es.amadornes.openlauncher.modpack.Modpack;
 import es.amadornes.openlauncher.util.Downloader;
 import es.amadornes.openlauncher.util.JSONUtils;
@@ -54,7 +54,7 @@ public class DownloadServerAmadornes extends DownloadServer {
 			con.connect();
 			JSONObject data = JSONUtils.getJSONObjectFromInputStream(con.getInputStream());
 			
-			String id = this.id + "_" + pack;
+			String id = pack;
 			String name = data.getString("name");
 			String author = data.getString("author");
 			int versionid = data.getInt("versionid");
@@ -71,7 +71,7 @@ public class DownloadServerAmadornes extends DownloadServer {
 			}catch(Exception ex){}
 			
 			Modpack modpack = new Modpack(id, name, packLogo, author, isPrivate, versionid, version, mcversion, this.id);
-			if(!description.equals("")){
+			if(!description.equals("") && description != null){
 				modpack.setDescription(description);
 			}
 			
@@ -91,32 +91,37 @@ public class DownloadServerAmadornes extends DownloadServer {
 	}
 
 	@Override
-	public void updatePack(String pack, int version) {
-		boolean installed = Util.isPackInstalled(this.id, pack);
-		JSONObject data = Util.getPackData(this.id, pack);
-		Modpack modpack = OpenLauncher.getPack(this.id, pack);
-		File pdf = Util.getPackDataFile(this.id, pack);
+	public void updatePack(String pack) {
+		Modpack server = OpenLauncher.getPack(this.id, pack);
+		Modpack client = server.getClientVersion();
+		File folder = new File(Util.getInstancesFolder(), this.id + "_" + pack + "/");
+		File dlFolder = new File(Util.getDownloadsFolder(), this.id + "_" + pack + "/");
+		
+		File pdf = new File(folder, "pack.json");
+		
+		folder.mkdirs();
+		dlFolder.mkdirs();
 		
 		int localVersion = 0;
-		if(installed){
-			localVersion = data.getInt("versionid");
+		int serverVersion = server.getVersion();
+		if(client != null){
+			localVersion = client.getVersion();
 		}
 		
-		for(int i = localVersion + 1; i <= modpack.getVersion(); i++){
+		for(int ver = (localVersion + 1); ver <= serverVersion; ver++){
 			try{
-				URL zipURL = new URL(serverURL + "modpacks/" + pack + "/versions/" + i + ".zip");
-				File zip = new File(Util.getDownloadsFolder(), this.id + "_" + pack + "/" + i + ".zip");
-				File dest = new File(Util.getInstancesFolder(), this.id + "_" + pack + "/");
+				URL zipURL = new URL(serverURL + "modpacks/" + pack + "/versions/" + ver + ".zip");
+				File zip = new File(dlFolder, ver + ".zip");
 				
 				Downloader.download(zipURL, zip);
-				ZipUtils.unzip(zip.getAbsolutePath(), dest.getAbsolutePath());
+				ZipUtils.unzip(zip.getAbsolutePath(), folder.getAbsolutePath());
 				
-				File delFile = new File(dest, "deleted.json");
+				File delFile = new File(folder, "deleted.json");
 				
 				if(delFile.exists()){
 					JSONArray files = JSONUtils.getJSONArrayFromInputStream(new FileInputStream(delFile));
 					for(int i2 = 0; i2 < files.length(); i2++){
-						File f = new File(dest, files.getString(i2));
+						File f = new File(folder, files.getString(i2));
 						if(f.exists())
 							f.delete();
 					}
@@ -124,10 +129,23 @@ public class DownloadServerAmadornes extends DownloadServer {
 				
 				zip.delete();
 				
-				JSONObject packdata = JSONUtils.getJSONObjectFromInputStream(new FileInputStream(pdf));
-				packdata.put("versionid", i);
+				JSONObject packdata = null;
+				try{
+					packdata = JSONUtils.getJSONObjectFromInputStream(new FileInputStream(pdf));
+				}catch(Exception e){}
+				if(packdata == null){
+					URL packdataurl = new URL(serverURL + "modpacks/" + pack + "/pack.json");
+					Downloader.download(packdataurl, pdf);
+					try{
+						packdata = JSONUtils.getJSONObjectFromInputStream(new FileInputStream(pdf));
+					}catch(Exception e){}
+				}
+				System.out.println("Has: " + packdata.has("versionid"));
+				packdata.remove("versionid");
+				packdata.put("versionid", ver);
 				
-				pdf.delete();
+				if(pdf.exists())
+					pdf.delete();
 				pdf.createNewFile();
 				
 				FileWriter w = new FileWriter(pdf);
@@ -136,7 +154,9 @@ public class DownloadServerAmadornes extends DownloadServer {
 			}catch(Exception e){
 				System.err.println("There was an error updating \"" + pack + "\" from the server \"" + this.id + "\". Contact a server admin to help you.");
 				break;
-			} 
+			}
 		}
+		
+		dlFolder.delete();
 	}
 }

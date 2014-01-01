@@ -50,8 +50,11 @@ public class Frame {
 	public Insets insets = new Insets(0, 0, 0, 0);
 	protected int tab = 0;
 	
+	public void setTab(int tab){
+		this.tab = tab;
+	}
+	
 	public Frame(int width, int height) {
-		frame.setUndecorated(true);
 		setWidth(Math.max(1, width));
 		setHeight(Math.max(1, height));
 		this.x = 0;

@@ -1,9 +1,12 @@
 package es.amadornes.openlauncher.modpack;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+
+import es.amadornes.openlauncher.util.Util;
 
 public class Modpack {
 	
@@ -18,6 +21,12 @@ public class Modpack {
 	private int version = 0;
 	private String versionString = "0.0.0";
 	private String mcVersion = "1.6.4";
+	private String serverID = "";
+	
+	private boolean downloaded = false;
+	
+	private Modpack clientVersion = null;
+	private Modpack serverVersion = null;
 	
 	@Override
 	public String toString() {
@@ -35,6 +44,19 @@ public class Modpack {
 		this.version = version;
 		this.versionString = versionString;
 		this.mcVersion = mcVersion;
+		this.serverID = serverID;
+		downloaded = new File(Util.getInstancesFolder(), serverID + "_" + id + "/pack.json").exists();
+		
+		if(name == null){
+			clientVersion = this;
+		}else{
+			serverVersion = this;
+			clientVersion = Util.getModpackFromLocalInfo(serverID, id);
+			if(clientVersion != null){
+				clientVersion.clientVersion = clientVersion;
+				clientVersion.serverVersion = this;
+			}
+		}
 	}
 	
 	public String getId() {
@@ -93,8 +115,28 @@ public class Modpack {
 		return author;
 	}
 	
+	public boolean hasDownloaded(){
+		return downloaded;
+	}
+	
+	public String getServerID() {
+		return serverID;
+	}
+	
+	public Modpack getClientVersion() {
+		return clientVersion;
+	}
+	
+	public Modpack getServerVersion() {
+		return serverVersion;
+	}
+	
+	public void setDownloaded(){
+		downloaded = true;
+	}
+	
 	public void play(){
-		
+		//TODO MAKE IT RUN
 	}
 	
 }

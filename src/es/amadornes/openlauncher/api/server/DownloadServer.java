@@ -1,4 +1,4 @@
-package es.amadornes.openlauncher.api.gui.server;
+package es.amadornes.openlauncher.api.server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public abstract class DownloadServer {
 	public abstract Modpack getPack(String pack);
 	public abstract boolean canUnlockPackWithKey(String pack, String key);
 	public abstract boolean isRecursiveUpdate();
-	public abstract void updatePack(String pack, int version);
+	public abstract void updatePack(String pack);
 	
 	public String getServerID(){
 		return id;

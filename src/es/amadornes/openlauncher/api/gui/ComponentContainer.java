@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
+
 public class ComponentContainer extends Component {
 	
 	public Frame owner;
@@ -20,6 +22,7 @@ public class ComponentContainer extends Component {
 	public void render(Graphics g){
 		renderBackground(g);
 		renderComponents(g);
+		renderJComponents(g);
 	}
 	
 	protected void renderBackground(Graphics g){}
@@ -31,7 +34,14 @@ public class ComponentContainer extends Component {
 		}
 	}
 	
+	protected synchronized void renderJComponents(Graphics g){
+		for(JComponent c : jcomponents){
+			c.paint(g.create(c.getX() - x, c.getY() - y, c.getWidth(), c.getHeight()));
+		}
+	}
+	
 	public Map<Component, Integer> components = new HashMap<Component, Integer>();
+	public List<JComponent> jcomponents = new ArrayList<JComponent>();
 	
 	public void addComponent(final Component c, int zIndex){
 		if(!components.keySet().contains(c)){
@@ -42,6 +52,11 @@ public class ComponentContainer extends Component {
 	
 	public void addComponent(Component c){
 		addComponent(c, components.size());
+	}
+	
+	public void addJComponent(JComponent c){
+		c.setLocation(c.getX() + x, c.getY() + y);
+		jcomponents.add(c);
 	}
 	
 	public int getWidth(){
