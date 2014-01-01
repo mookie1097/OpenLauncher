@@ -1,5 +1,6 @@
 package es.amadornes.openlauncher.gui;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -116,6 +117,14 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		description *= descriptionArea;
 		description *= height;
 		renderComponents(g.create(border, border, width - i.left - (border*2), height - i.top - (border*2) - ((int)description)));
+		
+		if(!OpenLauncher.loggedIn){
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5F));
+			g2d.setColor(Color.LIGHT_GRAY);
+			g2d.fillRect(0, 0, getWidth(), getHeight());
+			g2d.setComposite(AlphaComposite.Clear);
+		}
 	}
 	
 	@Override

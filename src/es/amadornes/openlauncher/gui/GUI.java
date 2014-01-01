@@ -38,8 +38,9 @@ public class GUI extends Frame {
 	public JTextField user = new JTextField(50);
 	public JLabel labelPass = new JLabel("Password:");
 	public JPasswordField pass = new JPasswordField(50);
-	
-	public ComponentButton loginButton;
+
+	public Component loginButton;
+	public Component loginButtonText;
 	
 	public GUI(int width, int height) {
 		super(width, height);
@@ -53,24 +54,24 @@ public class GUI extends Frame {
 		frame.add(labelUser);
 		frame.add(labelPass);
 
-		labelUser.setLocation(insets.left + 10 + 10, insets.top + 10 + 10);
-		labelUser.setSize(160 - 10 - 10 - 10, labelPass.getMinimumSize().height);
+		labelUser.setLocation(insets.left + 5 + 10, insets.top + 10 + 10);
+		labelUser.setSize(160 - 10 - 10, 10);
 		
-		user.setLocation(insets.left + 10 + 10, insets.top + 10 + 10 + labelUser.getHeight() + 5);
-		user.setSize(160 - 10 - 10 - 10, user.getMinimumSize().height + 10);
+		user.setLocation(insets.left + 5 + 10, insets.top + 10 + 10 + labelUser.getHeight() + 5);
+		user.setSize(160 - 10 - 10, user.getMinimumSize().height + 10);
 		
-		labelPass.setLocation(insets.left + 10 + 10, insets.top + 10 + 10 + user.getHeight() + 10 + labelUser.getHeight() + 5);
-		labelPass.setSize(160 - 10 - 10 - 10, labelPass.getMinimumSize().height);
+		labelPass.setLocation(insets.left + 5 + 10, insets.top + 10 + 10 + user.getHeight() + 5 + labelUser.getHeight() + 5);
+		labelPass.setSize(160 - 10 - 10, 10);
 		
-		pass.setLocation(insets.left + 10 + 10, insets.top + 10 + 10 + user.getHeight() + 10 + labelUser.getHeight() + 5 + 10 + labelPass.getHeight() + 5);
-		pass.setSize(160 - 10 - 10 - 10, pass.getMinimumSize().height + 10);
+		pass.setLocation(insets.left + 5 + 10, insets.top + 10 + 10 + user.getHeight() + 5 + labelUser.getHeight() + 5 + labelPass.getHeight() + 5);
+		pass.setSize(160 - 10 - 10, pass.getMinimumSize().height + 10);
 
 		user.setVisible(true);
 		pass.setVisible(true);
 		labelUser.setVisible(true);
 		labelPass.setVisible(true);
 		
-		loginButton = new ComponentButton(insets.left + 10 + 10, insets.top + 10 + 160 + 10, 160 - 10 - 10 - 10, pass.getMinimumSize().height + 10){
+		loginButton = new ComponentButton(insets.left + 10 + 10 - 2, insets.top + 5 + 87, 160 - 10 - 10 - 10 - 10, 30, "Login"){
 			@Override
 			public void onMouseUp(int x, int y, int button) {
 				OpenLauncher.login();

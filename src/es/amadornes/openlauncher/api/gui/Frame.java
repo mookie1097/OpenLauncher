@@ -343,6 +343,7 @@ public class Frame {
 								bs.show();
 							}while(bs.contentsLost());
 							bs.getDrawGraphics().dispose();
+							
 						    Thread.yield();
 						    firstTime = false;
 						}catch(Exception e){}

@@ -28,7 +28,7 @@ public class MojangAuth {
 		try{
 			String request = "{\"accessToken\": \"" + accessToken + "\"}";
 			String response = NetAPI.sendPost(server + "/validate", request);
-			if(response == null || response.trim() == "")
+			if(response == null || response.trim().length() == 0)
 				return true;
 		}catch(Exception e){}
 		return false;

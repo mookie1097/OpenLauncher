@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.gui.Component;
 import es.amadornes.openlauncher.api.gui.RenderHelper;
 import es.amadornes.openlauncher.modpack.Modpack;
@@ -59,7 +60,8 @@ public class ComponentModpackLogo extends Component {
 	}
 	
 	public void onMouseEnter(int x, int y) {
-		hovering = true;
+		if(OpenLauncher.loggedIn)
+			hovering = true;
 	}
 	public void onMouseLeave(int x, int y) {
 		hovering = false;
@@ -67,18 +69,20 @@ public class ComponentModpackLogo extends Component {
 	
 	@Override
 	public void onMouseUp(int x, int y, int button) {
-		if(owner.slide == false) {
-			owner.slide = true;
-			owner.selected = modpack;
-			super.onMouseUp(x, y, button);
-		} else if(owner.slide == true && owner.selected != modpack) {
-			// TODO: Slide to a side (depending on Modpack position) to change actual Modpack
-			owner.slide = true;
-			owner.selected = modpack;
-			super.onMouseUp(x, y, button);
-		} else if(owner.slide == true && owner.selected == modpack) {
-			owner.slide = false;
-			super.onMouseUp(x, y, button);
+		if(OpenLauncher.loggedIn){
+			if(owner.slide == false) {
+				owner.slide = true;
+				owner.selected = modpack;
+				super.onMouseUp(x, y, button);
+			} else if(owner.slide == true && owner.selected != modpack) {
+				// TODO: Slide to a side (depending on Modpack position) to change actual Modpack
+				owner.slide = true;
+				owner.selected = modpack;
+				super.onMouseUp(x, y, button);
+			} else if(owner.slide == true && owner.selected == modpack) {
+				owner.slide = false;
+				super.onMouseUp(x, y, button);
+			}
 		}
 	}
 	

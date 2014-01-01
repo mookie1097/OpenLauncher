@@ -5,10 +5,10 @@ import java.awt.Paint;
 
 public enum ColorScheme {
 	
-	WHITE_ORANGE(new Color(0xF7F7F7), new Color(0xDDDDDD), new Color(0xE3D58A), new Color(0xF0DD13), new Color(0xE6D415)),
-	WHITE_GREEN(new Color(0xF7F7F7), new Color(0xDDDDDD), new Color(0xADF2A0), new Color(0x65ED58), new Color(0x21DB0F));
+	WHITE_ORANGE(new Color(0xF7F7F7), new Color(0xDDDDDD), new Color(0xF7F7F7), new Color(0xEDEDED), new Color(0xE8DFC1)),
+	WHITE_GREEN(new Color(0xF7F7F7), new Color(0xDDDDDD), new Color(0xF7F7F7), new Color(0xEDEDED), new Color(0xC1E8D3));
 	
-	public static ColorScheme active = WHITE_GREEN;
+	public static ColorScheme active = WHITE_ORANGE;
 	
 	public Paint background, titlebar, buttonOff, buttonHover, buttonClick;
 	

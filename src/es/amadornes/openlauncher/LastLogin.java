@@ -48,7 +48,7 @@ public class LastLogin {
 				
 				if(MojangAuth.isValid(ACCESS_TOKEN)){
 					System.out.println("Logged in!");
-					OpenLauncher.loggedIn = true;
+					OpenLauncher.setLoggedIn(true);
 				}else{
 					System.err.println("Could not log in!");
 				}

@@ -80,13 +80,17 @@ public class OpenLauncher {
 		
 		for(DownloadServer sv : servers) {
 			String[] packs = sv.getAvailablePacks();
-			for(String id : packs) {
-				Modpack p = sv.getPack(id);
-				if(p != null) {
-					modpacks.add(p);
-				} else {
-					System.err.println("An error occoured while download information about the pack \"" + id + "\" from the server \"" + sv.getServerID() + "\"");
+			if(packs != null){
+				for(String id : packs) {
+					Modpack p = sv.getPack(id);
+					if(p != null) {
+						modpacks.add(p);
+					} else {
+						System.err.println("An error occoured while download information about the pack \"" + id + "\" from the server \"" + sv.getServerID() + "\"");
+					}
 				}
+			}else{
+				System.err.println("Could not connect to to the server \"" + sv.getServerID() + "\"");
 			}
 		}
 		
@@ -97,13 +101,11 @@ public class OpenLauncher {
 		Util.getWorkingDirectory().mkdirs();
 		Util.getInstancesFolder().mkdirs();
 		Util.getDownloadsFolder().mkdirs();
-		
-		/* Try to login using the LastLogin function */
-		LastLogin.tryLoading();
 	}
 	
 	private static void init(){
-		
+		/* Try to login using the LastLogin function */
+		LastLogin.tryLoading();
 	}
 	
 	private static void postInit(){
@@ -126,6 +128,13 @@ public class OpenLauncher {
 		gui.user.setVisible(!logged);
 		gui.pass.setVisible(!logged);
 		loggedIn = logged;
+		if(logged){
+			gui.removeComponent(gui.loginButton);
+			gui.removeComponent(gui.loginButtonText);
+		}else{
+			gui.addComponent(gui.loginButton);
+			gui.addComponent(gui.loginButtonText);
+		}
 	}
 	
 	public static void login(){
@@ -142,7 +151,6 @@ public class OpenLauncher {
 		if(data != null){
 			setLoggedIn(true);
 			LastLogin.save();
-			gui.removeComponent(gui.loginButton);
 		}
 	}
 	
