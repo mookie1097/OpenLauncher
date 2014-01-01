@@ -10,8 +10,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -58,7 +56,6 @@ public class Frame {
 		setHeight(Math.max(1, height));
 		this.x = 0;
 		this.y = 0;
-        
 
 		screen.setIgnoreRepaint(true);
 		
@@ -101,7 +98,7 @@ public class Frame {
 				onMouseWheelMove(ev.getPoint().x, ev.getPoint().y, ev.getScrollAmount());
 			}
 		});
-		frame.addKeyListener(new KeyListener() {
+		/*frame.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent ev) {
 				onKeyType(ev.getKeyCode());
 			}
@@ -111,7 +108,7 @@ public class Frame {
 			public void keyPressed(KeyEvent ev) {
 				onKeyDown(ev.getKeyCode());
 			}
-		});
+		});*/
 		final Frame me = this;
 		frame.addComponentListener(new ComponentListener() {
 			public void componentShown(ComponentEvent ev) {}
@@ -123,7 +120,10 @@ public class Frame {
 			public void componentHidden(ComponentEvent ev) {}
 		});
 		
+		frame.setLayout(null);
         frame.add(screen);
+        screen.setLocation(0, 0);
+        screen.setSize(width, height);
 		
 		startTickingRenderer();
 	}
@@ -194,7 +194,7 @@ public class Frame {
 				}
 			}
 		});
-		screen.addKeyListener(new KeyListener() {
+		/*screen.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
 				if(focus != null){
 					focus.onKeyType(e.getKeyCode());
@@ -210,7 +210,7 @@ public class Frame {
 					focus.onKeyDown(e.getKeyCode());
 				}
 			}
-		});
+		});*/
 	}
 	
 	public void setX(int x){
@@ -226,11 +226,13 @@ public class Frame {
 	public void setWidth(int width){
 		this.width = width;
 		frame.setSize(width, height);
+        screen.setSize(width, height);
 	}
 	
 	public void setHeight(int height){
 		this.height = height;
 		frame.setSize(width, height);
+        screen.setSize(width, height);
 	}
 	
 	public int getX() {

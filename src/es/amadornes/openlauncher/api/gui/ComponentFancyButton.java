@@ -10,7 +10,7 @@ import java.awt.Polygon;
 
 import es.amadornes.openlauncher.OpenLauncher;
 
-public class ComponentFancyButton1 extends Component {
+public class ComponentFancyButton extends Component {
 
 	protected String text = "";
 	
@@ -25,11 +25,11 @@ public class ComponentFancyButton1 extends Component {
 	
 	protected int tab = 0;
 
-	public ComponentFancyButton1(int x, int y, int width, int height, String text) {
+	public ComponentFancyButton(int x, int y, int width, int height, String text) {
 		super(x, y, width, height);
 		realX = x;
 		this.text = text != null ? text : "";
-		final ComponentFancyButton1 me = this;
+		final ComponentFancyButton me = this;
 		new Thread(new Runnable() {
 			public void run() {
 				while(true){
@@ -55,7 +55,7 @@ public class ComponentFancyButton1 extends Component {
 		}).start();
 	}
 	
-	public ComponentFancyButton1 setSelected(boolean selected) {
+	public ComponentFancyButton setSelected(boolean selected) {
 		select();
 		return this;
 	}
@@ -82,8 +82,8 @@ public class ComponentFancyButton1 extends Component {
 	protected void select(){
 		if(owner != null){
 			for(Component c : owner.components.keySet()){
-				if(c instanceof ComponentFancyButton1){
-					((ComponentFancyButton1)c).selected = false;
+				if(c instanceof ComponentFancyButton){
+					((ComponentFancyButton)c).selected = false;
 				}
 			}
 			owner.tab = tab;
@@ -142,7 +142,7 @@ public class ComponentFancyButton1 extends Component {
 		RenderHelper.drawCenteredString(text, (int)(width*0.125), (int) (height*0.45), width, (Graphics)g);
 	}
 	
-	public ComponentFancyButton1 setTab(int tab) {
+	public ComponentFancyButton setTab(int tab) {
 		this.tab = tab;
 		return this;
 	}

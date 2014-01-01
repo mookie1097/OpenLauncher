@@ -14,11 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import es.amadornes.openlauncher.OpenLauncher;
 import es.amadornes.openlauncher.api.gui.ColorScheme;
 import es.amadornes.openlauncher.api.gui.Component;
+import es.amadornes.openlauncher.api.gui.ComponentButton;
 import es.amadornes.openlauncher.api.gui.Frame;
 import es.amadornes.openlauncher.api.gui.RenderHelper;
 
@@ -29,9 +34,49 @@ public class GUI extends Frame {
 	private Point mouseDownCompCoords = null;
 	private List<Tab> tabs = new ArrayList<Tab>();
 	
+	public JLabel labelUser = new JLabel("Username:");
+	public JTextField user = new JTextField(50);
+	public JLabel labelPass = new JLabel("Password:");
+	public JPasswordField pass = new JPasswordField(50);
+	
+	public ComponentButton loginButton;
+	
 	public GUI(int width, int height) {
 		super(width, height);
 		insets = new Insets(30, 7, 7, 7);
+		
+		user.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		pass.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
+		
+		frame.add(user);
+		frame.add(pass);
+		frame.add(labelUser);
+		frame.add(labelPass);
+
+		labelUser.setLocation(insets.left + 10 + 10, insets.top + 10 + 10);
+		labelUser.setSize(160 - 10 - 10 - 10, labelPass.getMinimumSize().height);
+		
+		user.setLocation(insets.left + 10 + 10, insets.top + 10 + 10 + labelUser.getHeight() + 5);
+		user.setSize(160 - 10 - 10 - 10, user.getMinimumSize().height + 10);
+		
+		labelPass.setLocation(insets.left + 10 + 10, insets.top + 10 + 10 + user.getHeight() + 10 + labelUser.getHeight() + 5);
+		labelPass.setSize(160 - 10 - 10 - 10, labelPass.getMinimumSize().height);
+		
+		pass.setLocation(insets.left + 10 + 10, insets.top + 10 + 10 + user.getHeight() + 10 + labelUser.getHeight() + 5 + 10 + labelPass.getHeight() + 5);
+		pass.setSize(160 - 10 - 10 - 10, pass.getMinimumSize().height + 10);
+
+		user.setVisible(true);
+		pass.setVisible(true);
+		labelUser.setVisible(true);
+		labelPass.setVisible(true);
+		
+		loginButton = new ComponentButton(insets.left + 10 + 10, insets.top + 10 + 160 + 10, 160 - 10 - 10 - 10, pass.getMinimumSize().height + 10){
+			@Override
+			public void onMouseUp(int x, int y, int button) {
+				OpenLauncher.login();
+			}
+		};
+		addComponent(loginButton);
 	}
 	
 	@Override
@@ -52,6 +97,10 @@ public class GUI extends Frame {
 		}
 	}
 	
+	public void removeComponent(Component c){
+		components.remove(c);
+	}
+	
 	public void addTab(Tab tab){
 		tabs.add(tab);
 	}
@@ -70,6 +119,19 @@ public class GUI extends Frame {
 		if(tabs.size() > tab)
 			return tabs.get(tab);
 		return null;
+	}
+	
+	@Override
+	protected synchronized void render(Graphics g) {
+		super.render(g);
+		
+		if(!OpenLauncher.loggedIn){
+			labelUser.paint(g.create(labelUser.getX(), labelUser.getY(), labelUser.getWidth(), labelUser.getHeight()));
+			labelPass.paint(g.create(labelPass.getX(), labelPass.getY(), labelPass.getWidth(), labelPass.getHeight()));
+			
+			user.paint(g.create(user.getX(), user.getY(), user.getWidth(), user.getHeight()));
+			pass.paint(g.create(pass.getX(), pass.getY(), pass.getWidth(), pass.getHeight()));
+		}
 	}
 	
 	@Override
@@ -212,6 +274,19 @@ public class GUI extends Frame {
 				mouseDownCompCoords = new Point(x, y);
 			}
 		}
+		
+		if(x >= user.getX() && x < (user.getX() + user.getWidth())){
+			if(y >= user.getY() && y < (user.getY() + user.getHeight())){
+				user.requestFocus();
+			}
+		}
+		
+		if(x >= pass.getX() && x < (pass.getX() + pass.getWidth())){
+			if(y >= pass.getY() && y < (pass.getY() + pass.getHeight())){
+				pass.requestFocus();
+			}
+		}
+		
 		if(x >= insets.left + 170 + 6 && x < width - insets.right){
 			if(y >= insets.top && y < height - insets.bottom){
 				if(getTab() != null){
