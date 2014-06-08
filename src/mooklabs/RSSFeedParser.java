@@ -12,16 +12,14 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
 
 public class RSSFeedParser {
-	static final String TITLE = "title";
-	static final String DESCRIPTION = "description";
+	static final String TITLE = "name";
+	static final String DESCRIPTION = "desc";
+	static final String VERSION = "version";
 	static final String CHANNEL = "channel";
-	static final String LANGUAGE = "language";
-	static final String COPYRIGHT = "copyright";
 	static final String LINK = "link";
 	static final String AUTHOR = "author";
-	static final String ITEM = "item";
+	static final String ITEM = "pack";
 	static final String PUB_DATE = "pubDate";
-	static final String GUID = "guid";
 
 	final URL url;
 
@@ -41,11 +39,10 @@ public class RSSFeedParser {
 			String description = "";
 			String title = "";
 			String link = "";
-			String language = "";
-			String copyright = "";
 			String author = "";
 			String pubdate = "";
-			String guid = "";
+			String picLink = "";
+			String version = "";
 
 			// First create a new XMLInputFactory
 			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -62,8 +59,7 @@ public class RSSFeedParser {
 					case ITEM:
 						if (isFeedHeader) {
 							isFeedHeader = false;
-							feed = new Feed(title, link, description, language,
-									copyright, pubdate);
+							feed = new Feed(title, link, description,  pubdate);
 						}
 						event = eventReader.nextEvent();
 						break;
@@ -73,14 +69,11 @@ public class RSSFeedParser {
 					case DESCRIPTION:
 						description = getCharacterData(event, eventReader);
 						break;
+					case VERSION:
+						version = getCharacterData(event, eventReader);
+						break;
 					case LINK:
 						link = getCharacterData(event, eventReader);
-						break;
-					case GUID:
-						guid = getCharacterData(event, eventReader);
-						break;
-					case LANGUAGE:
-						language = getCharacterData(event, eventReader);
 						break;
 					case AUTHOR:
 						author = getCharacterData(event, eventReader);
@@ -88,8 +81,8 @@ public class RSSFeedParser {
 					case PUB_DATE:
 						pubdate = getCharacterData(event, eventReader);
 						break;
-					case COPYRIGHT:
-						copyright = getCharacterData(event, eventReader);
+					case "picLink":
+						picLink = getCharacterData(event, eventReader);
 						break;
 					}
 				} else if (event.isEndElement()) {
@@ -97,9 +90,10 @@ public class RSSFeedParser {
 						FeedMessage message = new FeedMessage();
 						message.setAuthor(author);
 						message.setDescription(description);
-						message.setGuid(guid);
 						message.setLink(link);
 						message.setTitle(title);
+						message.version = version;
+
 						feed.getMessages().add(message);
 						event = eventReader.nextEvent();
 						continue;

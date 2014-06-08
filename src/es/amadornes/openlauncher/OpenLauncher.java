@@ -2,10 +2,14 @@ package es.amadornes.openlauncher;
 
 import java.awt.Font;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mooklabs.FeedMessage;
+import mooklabs.ReadXMLFromURl;
 import net.minecraft.login.MojangAuth;
 import net.technicpack.launchercore.install.InstalledPack;
 import es.amadornes.openlauncher.api.gui.ComponentFancyButton;
@@ -46,7 +50,23 @@ public class OpenLauncher {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {@Override
 			public void run(){ exit(); }}));
 		System.out.println("preinit");
-		modpacks.add(new Modpack(username, username, null, username, loggedIn, 0, username, username, username));
+
+		//{{ add modpacks
+		String urlstring = "https://gist.githubusercontent.com/mookie1097/2ab755c62a5a6daa47b5/raw/00e7006a957b754185d98ffd4ff7b0ffbb5b2cf1/modpackList";
+		boolean isprivate = false;
+		String mcVersion = "mcv71.7.2";
+		int version =1;
+		for (FeedMessage m: ReadXMLFromURl.getModpackData(urlstring)) {
+			try {
+				modpacks.add(new Modpack(m.title,m.title,new URL(m.link),m.author,isprivate,version,m.version,mcVersion,"serverid"));
+				modpacks.get(modpacks.size()-1).setDescription(m.description);
+			} catch (MalformedURLException e) {
+
+				e.printStackTrace();
+			}
+		}
+		//}}
+
 		preInit();
 
 		/* Try to set Pixel font, if fails, set Arial */

@@ -5,11 +5,12 @@ package mooklabs;
  */
 public class FeedMessage {
 
-	String title;
-	String description;
-	String link;
-	String author;
-	String guid;
+	public String title;
+	public String description;
+	public String link;
+	public String author;
+	public String version;
+	public String picLink;
 
 	public String getTitle() {
 		return title;
@@ -32,7 +33,7 @@ public class FeedMessage {
 	}
 
 	public void setLink(String link) {
-		this.link = link;
+		this.link = "https://www.youtube.com/channel/UCEvf_oE_FG9gNSCd7iUG7JA";//link;
 	}
 
 	public String getAuthor() {
@@ -43,19 +44,10 @@ public class FeedMessage {
 		this.author = author;
 	}
 
-	public String getGuid() {
-		return guid;
-	}
-
-	public void setGuid(String guid) {
-		this.guid = guid;
-	}
-
 	@Override
 	public String toString() {
 		return "FeedMessage [title=" + title + ", description=" + description
-				+ ", link=" + link + ", author=" + author + ", guid=" + guid
-				+ "]";
+				+ ", link=" + link + ", author=" + author+ ", version=" + version;
 	}
 
 }
