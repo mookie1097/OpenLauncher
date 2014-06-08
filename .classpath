@@ -3,5 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="resources/Gson/gson-2.2.4.jar" sourcepath="resources/Gson/gson-2.2.4-sources.jar"/>
+	<classpathentry kind="lib" path="resources/ApacheCommonsIO/commons-io-2.4.jar" sourcepath="resources/ApacheCommonsIO/commons-io-2.4-sources.jar"/>
+	<classpathentry kind="lib" path="resources/apache/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="resources/apache/commons-lang3-3.1.jar" sourcepath="resources/apache/commons-lang3-3.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

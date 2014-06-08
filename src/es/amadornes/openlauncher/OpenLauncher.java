@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.login.MojangAuth;
+import net.technicpack.launchercore.install.InstalledPack;
 import es.amadornes.openlauncher.api.gui.ComponentFancyButton;
 import es.amadornes.openlauncher.api.server.DownloadServer;
 import es.amadornes.openlauncher.gui.GUI;
@@ -28,24 +29,26 @@ import es.amadornes.openlauncher.util.Util;
  */
 
 public class OpenLauncher {
-	
+
 	/* Instantiate GUI */
 	public static GUI gui;
-	
+
 	/* Set some variables */
 	public static boolean loggedIn = false;
 	public static String username = "Unknown";
 	public static Font font;
-	
+
 	private static DownloadServer[] servers = new DownloadServer[]{ new DownloadServerAmadornes() };
 	public static List<Modpack> modpacks = new ArrayList<Modpack>();
-	
+
 	public static void main(String[] args){
 		/* Add shutdown event */
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {public void run(){ exit(); }}));
-		
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {@Override
+			public void run(){ exit(); }}));
+		System.out.println("preinit");
+		modpacks.add(new Modpack(username, username, null, username, loggedIn, 0, username, username, username));
 		preInit();
-		
+
 		/* Try to set Pixel font, if fails, set Arial */
 		try {
 			InputStream fontstream = OpenLauncher.class.getResourceAsStream("/font/pixel.ttf");
@@ -53,33 +56,47 @@ public class OpenLauncher {
 		} catch (Exception e) {
 			font = new Font("Arial", Font.PLAIN, 14);
 		}
-		
+		System.out.println("gui");
+
 		/* Set GUI with dimensions 1280x720 */
 		gui = new GUI(1280, 720);
-		
+		System.out.println("initcomp");
+		System.out.println("1");
 		/* Add sidebar Tabs */
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45 - 45 - 45, 150, 40, "News").setSelected(true));
+		System.out.println("1");
 		gui.addTab(new TabNews(gui), 0);
+		System.out.println("2");
+
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45 - 45, 150, 40, "Modpacks").setTab(1));
-		gui.addTab(new TabModpacks(gui), 1);
+		gui.addTab(new TabModpacks(gui), 1);		System.out.println("1");
+
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45, 150, 40, "Console").setTab(2));
-		gui.addTab(new TabConsole(gui), 2);
+		gui.addTab(new TabConsole(gui), 2);		System.out.println("1");
+
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top, 150, 40,	"Settings").setTab(3));
-		gui.addTab(new TabSettings(gui), 3);
-		
+		gui.addTab(new TabSettings(gui), 3);		System.out.println("1");
+
+		System.out.println("settab");
+
 		gui.setTab(0);
-		
+		System.out.println("init");
+
 		init();
-		
+
 		/* Center and show the GUI */
 		gui.center();
 		gui.show();
-		
+		System.out.println("postinit");
+
+		InstalledPack pack = new InstalledPack();
+
 		postInit();
 	}
-	
-	public static void loadModpacks() { new Thread(new Runnable() { public void run() {
-		
+
+	public static void loadModpacks() { new Thread(new Runnable() { @Override
+		public void run() {
+
 		for(DownloadServer sv : servers) {
 			String[] packs = sv.getAvailablePacks();
 			if(packs != null){
@@ -95,42 +112,42 @@ public class OpenLauncher {
 				System.err.println("Could not connect to to the server \"" + sv.getServerID() + "\"");
 			}
 		}
-		
+
 	}}).start();}
-	
+
 	private static void preInit(){
 		/* Create "openlauncher" data directory */
 		Util.getWorkingDirectory().mkdirs();
 		Util.getInstancesFolder().mkdirs();
 		Util.getDownloadsFolder().mkdirs();
 	}
-	
+
 	private static void init(){
 		/* Try to login using the LastLogin function */
 		LastLogin.tryLoading();
 	}
-	
+
 	private static void postInit(){
 		/* Start loading modpacks from the various servers */
 		loadModpacks();
 	}
-	
+
 	private static void exit(){}
-	
+
 	public static Modpack getPack(String server, String id){
 		for(Modpack m : modpacks)
 			if(m.getId().equals(id) && m.getServerID().equals(server))
 				return m;
 		return null;
 	}
-	
+
 	public static DownloadServer getServer(String server){
 		for(DownloadServer s : servers)
 			if(s.getServerID().equals(server))
 				return s;
 		return null;
 	}
-	
+
 	public static void setLoggedIn(boolean logged){
 		gui.labelUser.setVisible(!logged);
 		gui.labelPass.setVisible(!logged);
@@ -145,7 +162,7 @@ public class OpenLauncher {
 			gui.addComponent(gui.loginButtonText);
 		}
 	}
-	
+
 	public static void login(){
 		Map<String, String> data = null;
 		try {
@@ -156,11 +173,11 @@ public class OpenLauncher {
 			LastLogin.UUID = data.get("UUID");
 			username = data.get("username");
 		} catch (Exception e) {}
-		
+
 		if(data != null){
 			setLoggedIn(true);
 			LastLogin.save();
 		}
 	}
-	
+
 }
