@@ -44,7 +44,6 @@ public class Util {
 		default:
 			workingDirectory = new File(userHome, APP_NAME + "/");
 		}
-		System.out.println(workingDirectory);
 		return workingDirectory;
 	}
 

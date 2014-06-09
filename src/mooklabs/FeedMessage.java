@@ -46,8 +46,8 @@ public class FeedMessage {
 
 	@Override
 	public String toString() {
-		return "FeedMessage [title=" + title + ", description=" + description
-				+ ", link=" + link + ", author=" + author+ ", version=" + version;
+		return "Modpack [name=" + title + ", description=" + description
+				+ ", author=" + author+ ", version=" + version + ", link=" + link + "]";
 	}
 
 }

@@ -12,7 +12,6 @@ import java.util.Map;
 import mooklabs.FeedMessage;
 import mooklabs.ReadXMLFromURl;
 import net.minecraft.login.MojangAuth;
-import net.technicpack.launchercore.install.InstalledPack;
 import es.amadornes.openlauncher.api.gui.ComponentFancyButton;
 import es.amadornes.openlauncher.api.server.DownloadServer;
 import es.amadornes.openlauncher.gui.GUI;
@@ -35,6 +34,23 @@ import es.amadornes.openlauncher.util.Util;
  */
 
 public class OpenLauncher {
+
+	//location of them Mojang server that MC itself & the json's are pulled from
+	public final static String mc_dl = "https://s3.amazonaws.com/Minecraft.Download/";
+	//location of them Mojang server that MC's resources are pulled from
+	public final static String mc_res = "http://resources.download.minecraft.net/";
+	//location of them Mojang server that hosts the Minecraft Maven host
+	public final static String mc_libs = "https://libraries.minecraft.net/";
+
+
+
+
+
+
+
+
+
+
 
 	/* Instantiate GUI */
 	public static GUI gui;
@@ -75,18 +91,61 @@ public class OpenLauncher {
 				e.printStackTrace();
 			}
 		}
+
 		for (Modpack m: modpacks) {
 			File zip = new File(dlFolder,m.getName()+m.getVersion()+".jar");
-			System.out.println(m.link);
-			try {
-				Downloader.download(new URL(m.link), zip);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			if (!zip.exists())
+				try {
+					System.out.println("Downloading" + m.getName()+ " from " + m.link);
+					Downloader.download(new URL(m.link), zip);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 		}
+		/*
+
+		try {
+			File local = new File(dlFolder, "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
+			if (!local.exists()) {
+				System.out.println("Downloading Minecraft from: "+mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion));
+				Downloader.download( new URL(mc_dl + "versions/{MC_VER}/{MC_VER}.jar".replace("{MC_VER}", mcVersion)), local);
+			}
+
+
+			//check if our copy exists of the version json if not backup to mojang's copy
+			URL url = new URL(mc_dl + "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
+			File json = new File(dlFolder, "versions/{MC_VER}/{MC_VER}.json".replace("{MC_VER}", mcVersion));
+			int attempt = 0, attempts = 3;
+			boolean success = false;
+			Exception reason = null;
+			while ((attempt < attempts) && !success) {
+				try {
+					success = true;
+					Downloader.download(url, json);
+				} catch (Exception e) {
+					success = false;
+					reason = e;
+					attempt++;
+				}
+				if (attempt == attempts && !success) {
+					System.out.println("JSON download failed"+ reason.getLocalizedMessage());
+					break;
+				}
+			}
+
+			//Version version = JsonFactory.loadVersion(json);
+
+
+
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 */
+
 
 		//}}
 
@@ -104,23 +163,19 @@ public class OpenLauncher {
 		/* Set GUI with dimensions 1280x720 */
 		gui = new GUI(1280, 720);
 		System.out.println("initcomp");
-		System.out.println("1");
+
 		/* Add sidebar Tabs */
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45 - 45 - 45, 150, 40, "News").setSelected(true));
-		System.out.println("1");
 		gui.addTab(new TabNews(gui), 0);
-		System.out.println("2");
 
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45 - 45, 150, 40, "Modpacks").setTab(1));
-		gui.addTab(new TabModpacks(gui), 1);		System.out.println("1");
+		gui.addTab(new TabModpacks(gui), 1);
 
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top - 45, 150, 40, "Console").setTab(2));
-		gui.addTab(new TabConsole(gui), 2);		System.out.println("1");
+		gui.addTab(new TabConsole(gui), 2);
 
 		gui.addComponent(new ComponentFancyButton(29 - gui.insets.left, gui.getHeight() - 75 - gui.insets.top, 150, 40,	"Settings").setTab(3));
-		gui.addTab(new TabSettings(gui), 3);		System.out.println("1");
-
-		System.out.println("settab");
+		gui.addTab(new TabSettings(gui), 3);
 
 		gui.setTab(0);
 		System.out.println("init");
@@ -131,8 +186,6 @@ public class OpenLauncher {
 		gui.center();
 		gui.show();
 		System.out.println("postinit");
-
-		InstalledPack pack = new InstalledPack();
 
 		postInit();
 	}
@@ -222,5 +275,8 @@ public class OpenLauncher {
 			LastLogin.save();
 		}
 	}
+
+
+
 
 }

@@ -31,12 +31,12 @@ import es.amadornes.openlauncher.api.gui.Frame;
 import es.amadornes.openlauncher.api.gui.RenderHelper;
 
 public class GUI extends Frame {
-	
+
 	public int screen = 0;
 	private boolean dragging = false;
 	private Point mouseDownCompCoords = null;
 	private List<Tab> tabs = new ArrayList<Tab>();
-	
+
 	public JLabel labelUser = new JLabel("Username:");
 	public JTextField user = new JTextField(50);
 	public JLabel labelPass = new JLabel("Password:");
@@ -44,14 +44,14 @@ public class GUI extends Frame {
 
 	public Component loginButton;
 	public Component loginButtonText;
-	
+
 	public GUI(int width, int height) {
 		super(width, height);
 		frame.setMinimumSize(new Dimension(900, 600));
-		
-		user.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), BorderFactory.createEmptyBorder(0, 4, 0, 4)));
-		pass.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), BorderFactory.createEmptyBorder(0, 4, 0, 4)));
-		
+
+		user.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED), BorderFactory.createEmptyBorder(0, 4, 0, 4)));
+		pass.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.PINK), BorderFactory.createEmptyBorder(0, 4, 0, 4)));
+
 		frame.add(user);
 		frame.add(pass);
 		frame.add(labelUser);
@@ -59,13 +59,13 @@ public class GUI extends Frame {
 
 		labelUser.setLocation(insets.left + 5 + 10, insets.top + 10 + 10);
 		labelUser.setSize(160 - 10 - 10, 10);
-		
+
 		user.setLocation(insets.left + 5 + 10, insets.top + 10 + 10 + labelUser.getHeight() + 5);
 		user.setSize(160 - 10 - 10, user.getMinimumSize().height + 10);
-		
+
 		labelPass.setLocation(insets.left + 5 + 10, insets.top + 10 + 10 + user.getHeight() + 5 + labelUser.getHeight() + 5);
 		labelPass.setSize(160 - 10 - 10, 10);
-		
+
 		pass.setLocation(insets.left + 5 + 10, insets.top + 10 + 10 + user.getHeight() + 5 + labelUser.getHeight() + 5 + labelPass.getHeight() + 5);
 		pass.setSize(160 - 10 - 10, pass.getMinimumSize().height + 10);
 
@@ -73,8 +73,8 @@ public class GUI extends Frame {
 		pass.setVisible(true);
 		labelUser.setVisible(true);
 		labelPass.setVisible(true);
-		
-		loginButton = new ComponentButton(insets.left + 10 + 10 - 2, insets.top + 5 + 87, 160 - 10 - 10 - 10 - 10, 30, "Login"){
+
+		loginButton = new ComponentButton(insets.left + 10 + 15, insets.top + 5+29+ 87, 160 - 10 - 10 - 10 - 10, 30, "Login"){
 			@Override
 			public void onMouseUp(int x, int y, int button) {
 				OpenLauncher.login();
@@ -82,7 +82,7 @@ public class GUI extends Frame {
 		};
 		addComponent(loginButton);
 	}
-	
+
 	@Override
 	public void addComponent(Component c) {
 		if(c instanceof Tab){
@@ -91,7 +91,7 @@ public class GUI extends Frame {
 			super.addComponent(c);
 		}
 	}
-	
+
 	@Override
 	public void addComponent(Component c, int zIndex) {
 		if(c instanceof Tab){
@@ -100,31 +100,31 @@ public class GUI extends Frame {
 			super.addComponent(c, zIndex);
 		}
 	}
-	
+
 	public void removeComponent(Component c){
 		components.remove(c);
 	}
-	
+
 	public void addTab(Tab tab){
 		tabs.add(tab);
 	}
-	
+
 	public void addTab(Tab tab, int id){
 		while(tabs.size() <= id)
 			tabs.add(null);
 		tabs.set(id, tab);
 	}
-	
+
 	public List<Tab> getTabs(){
 		return tabs;
 	}
-	
+
 	public Tab getTab(){
 		if(tabs.size() > tab)
 			return tabs.get(tab);
 		return null;
 	}
-	
+
 	@Override
 	public void setTab(int tab){
 		int old = this.tab;
@@ -136,47 +136,47 @@ public class GUI extends Frame {
 			frame.add(c);
 		}
 	}
-	
+
 	@Override
 	protected synchronized void render(Graphics g) {
 		super.render(g);
-		
+
 		if(!OpenLauncher.loggedIn){
 			labelUser.paint(g.create(labelUser.getX(), labelUser.getY(), labelUser.getWidth(), labelUser.getHeight()));
 			labelPass.paint(g.create(labelPass.getX(), labelPass.getY(), labelPass.getWidth(), labelPass.getHeight()));
-			
+
 			user.paint(g.create(user.getX(), user.getY(), user.getWidth(), user.getHeight()));
 			pass.paint(g.create(pass.getX(), pass.getY(), pass.getWidth(), pass.getHeight()));
 		}
 	}
-	
+
 	@Override
 	protected synchronized void renderBackground(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setPaint(ColorScheme.active.background);
 		g2d.fillRect(0, 0, width, height);
 		renderSidebar(g2d);
-		
+
 		if(getTab() != null){
-			getTab().render((Graphics2D) g2d.create(insets.left + 170 + 6, insets.top, width - insets.left - 170 - 6 - insets.right, height - insets.top - insets.bottom));
+			getTab().render(g2d.create(insets.left + 170 + 6, insets.top, width - insets.left - 170 - 6 - insets.right, height - insets.top - insets.bottom));
 		}
 	}
-	
+
 	private synchronized void renderFrame(Graphics2D g){
 		Insets i = insets;
-		
+
 		//Render titlebar
 		g.setPaint(ColorScheme.active.titlebar);
 		g.fillRect(0, 0, width, i.top);
-		
+
 		//Render other bars
 		g.fillRect(0, 0, i.left, height);
 		g.fillRect(0, height - i.bottom, width, i.bottom);
 		g.fillRect(width - i.right, 0, i.right, height);
-		
+
 		//Render buttons
 		renderButtons(g);
-		
+
 		//Render grip
 		g.setPaint(ColorScheme.active.titlebar);
 		Polygon grip = new Polygon();
@@ -184,7 +184,7 @@ public class GUI extends Frame {
 		grip.addPoint(width - insets.right, height - insets.bottom);
 		grip.addPoint(width - insets.right, height - insets.bottom - 20);
 		g.fillPolygon(grip);
-		
+
 	}
 	private synchronized void renderButtons(Graphics2D g){
 		Insets i = insets;
@@ -194,12 +194,12 @@ public class GUI extends Frame {
 		g.fillRect(this.width - i.right - (width * 2), 0, width * 2, (int)(i.top * 0.75));
 		g.setColor(new Color(0xD5D5D5));
 		g.fillRect(this.width - i.right - (width * 2) - width - 1, 0, width, (int)(i.top * 0.75));
-		
+
 		//Render text
 		Font f = new Font("Arial", Font.PLAIN, 16);
 		g.setFont(f);
 		FontMetrics fm = new FontMetrics(f){private static final long serialVersionUID = 1L;};
-		
+
 		String close = "x";
 		String minimize = "_";
 		Rectangle2D cb = fm.getStringBounds(close, g);
@@ -210,22 +210,22 @@ public class GUI extends Frame {
 		g.setColor(new Color(0x999999));
 		g.drawString(minimize, this.width - i.right - (width * 2) - 3 - (width/2) - ((float)(mb.getWidth()/2)), ((float)(((i.top * 0.75)/2) + (mb.getHeight()/2))) - 8);
 	}
-	
+
 	private synchronized void renderSidebar(Graphics2D g){
 		Insets i = insets;
 		//Render separator column
 		g.setPaint(ColorScheme.active.titlebar);
 		g.fillRect(i.left + 170, i.top, 6, height - i.top - i.bottom);
-		
-		
+
+
 		//Render image rectangle
 		if(OpenLauncher.loggedIn){
 			g.setPaint(Color.BLACK);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
-			
+
 			String username = OpenLauncher.username;
 			Font f = OpenLauncher.font.deriveFont(Font.BOLD, 36);
-			
+
 			try {
 				BufferedImage img = ImageIO.read(new URL("https://minotar.net/avatar/" + username + "/150.png"));
 				g.drawImage(img, i.left + 10, i.top + 10, null);
@@ -235,29 +235,29 @@ public class GUI extends Frame {
 				g.translate(i.left + 3, i.top + 21);
 				g.translate(tx, ty);
 				g.rotate(Math.PI/4);
-				
+
 				g.setPaint(Color.WHITE);
-				
+
 				if(f.getFontName().equalsIgnoreCase("Pixelade")){
 					f = f.deriveFont(55F);
 				}
 				g.setFont(f);
 				g.drawString("ERROR", 0, 0);
-				
+
 				g.rotate(-(Math.PI/4));
 				g.translate(-tx, -ty);
 				g.translate(-(i.left + 10), -(i.top + 10));
 			}
-			
+
 			g.setFont(f.deriveFont(18F));
 			g.setPaint(Color.BLACK);
-			RenderHelper.drawCenteredString(username, i.left + 10, i.top + 20 + 160, 160, (Graphics)g);
+			RenderHelper.drawCenteredString(username, i.left + 10, i.top + 20 + 160, 160, g);
 		}else{
 			g.setPaint(ColorScheme.active.titlebar);
 			g.fillRoundRect(i.left + 5, i.top + 5, 160, 160, 10, 10);
 		}
 	}
-	
+
 	@Override
 	public void onClick(int x, int y, int button) {
 		clickClose(x, y);
@@ -285,6 +285,7 @@ public class GUI extends Frame {
 			}
 		}
 	}
+	@Override
 	public void onMouseDown(int x, int y, int button){
 		if(y >= 0 && y < insets.top){
 			if(!clickClose(x, y) && !clickMinimize(x, y)){
@@ -292,19 +293,19 @@ public class GUI extends Frame {
 				mouseDownCompCoords = new Point(x, y);
 			}
 		}
-		
+
 		if(x >= user.getX() && x < (user.getX() + user.getWidth())){
 			if(y >= user.getY() && y < (user.getY() + user.getHeight())){
 				user.requestFocus();
 			}
 		}
-		
+
 		if(x >= pass.getX() && x < (pass.getX() + pass.getWidth())){
 			if(y >= pass.getY() && y < (pass.getY() + pass.getHeight())){
 				pass.requestFocus();
 			}
 		}
-		
+
 		if(x >= insets.left + 170 + 6 && x < width - insets.right){
 			if(y >= insets.top && y < height - insets.bottom){
 				if(getTab() != null){
@@ -313,6 +314,7 @@ public class GUI extends Frame {
 			}
 		}
 	}
+	@Override
 	public void onMouseMove(int x, int y) {
 		if(dragging){
 			frame.setLocation((x + frame.getX()) - mouseDownCompCoords.x, (y + frame.getY()) - mouseDownCompCoords.y);
@@ -355,8 +357,8 @@ public class GUI extends Frame {
 			}
 		}
 	}
-	
-	
+
+
 	private boolean clickClose(int x, int y){
 		Insets i = insets;
 		int width = 25;
@@ -377,5 +379,5 @@ public class GUI extends Frame {
 		}
 		return false;
 	}
-	
+
 }

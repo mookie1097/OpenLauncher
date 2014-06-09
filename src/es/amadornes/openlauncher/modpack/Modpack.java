@@ -22,7 +22,7 @@ public class Modpack {
 
 	private int version = 0;
 	private String versionString = "0.0.0";
-	private String mcVersion = "1.6.4";
+	private String mcVersion = "1.7.2";
 	private String serverID = "";
 
 	private boolean downloaded = false;
