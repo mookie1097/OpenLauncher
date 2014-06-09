@@ -33,7 +33,7 @@ public class FeedMessage {
 	}
 
 	public void setLink(String link) {
-		this.link = "https://www.youtube.com/channel/UCEvf_oE_FG9gNSCd7iUG7JA";//link;
+		this.link = link;//link;
 	}
 
 	public String getAuthor() {

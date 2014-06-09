@@ -19,44 +19,44 @@ import es.amadornes.openlauncher.modpack.Modpack;
 import es.amadornes.openlauncher.util.Util;
 
 public class ComponentContainerModpacks extends ComponentContainer {
-	
+
 	private Insets i = new Insets(10, 10, 10, 10);
 	private int border = 2;
 	private int packsPerRow = 7;
 	private int packSeparation = 10;
 	private float descriptionArea = 0.5F;
 	private Insets descriptionInsets = new Insets(10, 10, 10, 10);
-	
+
 	private float progress = 0;
-	
+
 	private int logoWidth = 20;
-	
+
 	public Modpack selected = null;
 	public boolean slide = false;
-	
+
 	//private float scroll = 0;
 	//private boolean needsScroll = false;
-	
+
 	@Override
 	public int getWidth() {
 		return width;
 	}
-	
+
 	@Override
 	public int getHeight() {
 		return height;
 	}
-	
+
 	private int pack = 0;
 	private List<Modpack> added = new ArrayList<Modpack>();
-	
+
 	public ComponentContainerModpacks(int x, int y, int width, int height, Frame owner) {
 		super(x, y, width, height, owner);
-		
+
 		float logoWidth = width - i.left - i.right - (border*2) - (packSeparation * (packsPerRow - 1));
 		logoWidth /= packsPerRow;
 		this.logoWidth = (int) logoWidth;
-		
+
 		/*int shownPacks = 0;
 
 		for(Modpack m : OpenLauncher.modpacks){
@@ -64,12 +64,13 @@ public class ComponentContainerModpacks extends ComponentContainer {
 				shownPacks++;
 			}
 		}
-		
+
 		// TODO: Add scroll
 		needsScroll = (i.top + i.bottom + (border * 2) + ((packSeparation + this.logoWidth) * (((int)(Math.floor(shownPacks/packsPerRow) + 1)) / ((progress/100) * (1F - descriptionArea))))) > height;*/
-		
+
 		final ComponentContainerModpacks me = this;
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				while(true){
 					for(Modpack m : OpenLauncher.modpacks){
@@ -85,8 +86,9 @@ public class ComponentContainerModpacks extends ComponentContainer {
 				}
 			}
 		}).start();
-		
+
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				while(true){
 					try {
@@ -111,7 +113,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 			}
 		}).start();
 	}
-	
+
 	@Override
 	public void render(Graphics g) {
 		renderBackground(g);
@@ -121,7 +123,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		description *= descriptionArea;
 		description *= height;
 		renderComponents(g.create(border, border, width - i.left - (border*2), height - i.top - (border*2) - ((int)description)));
-		
+
 		if(!OpenLauncher.loggedIn){
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5F));
@@ -130,16 +132,16 @@ public class ComponentContainerModpacks extends ComponentContainer {
 			g2d.setComposite(AlphaComposite.Clear);
 		}
 	}
-	
+
 	@Override
 	protected void renderBackground(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		
+
 		float description = progress;
 		description /= 100;
 		description *= descriptionArea;
 		description *= height;
-		
+
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.fillRect(0, 0, width, border);
 		g2d.fillRect(0, 0, border, height);
@@ -147,19 +149,19 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		g2d.fillRect(0, height - ((int)description) - border, width, (int)description + border);
 		//g2d.fillRect(0, 0, width, height);
 	}
-	
+
 	protected void renderModpackInfoTab(Graphics gr){
 		float description = progress;
 		description /= 100;
 		description *= descriptionArea;
 		description *= height;
-		
+
 		Graphics g = gr.create(descriptionInsets.left, height - ((int)description) - border + descriptionInsets.top, width - descriptionInsets.left - descriptionInsets.right, (int)description + border - descriptionInsets.top - descriptionInsets.bottom);
 		Graphics2D g2d = (Graphics2D) g;
-		
+
 		int width = g2d.getClipBounds().width;
 		int finalHeight = (int) ((height * descriptionArea) + border - descriptionInsets.top - descriptionInsets.bottom);
-		
+
 		try{
 			g2d.drawImage(selected.getLogo(), 0, 0, finalHeight, finalHeight, null);
 
@@ -172,7 +174,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 
 			g2d.setFont(new Font("Arial", Font.PLAIN, aSize));
 			RenderHelper.drawVerticallyCenteredString("Author: " + selected.getAuthor(), finalHeight + 15, tSize + 5, aSize, g2d);
-			
+
 			g2d.setFont(new Font("Arial", Font.PLAIN, dSize));
 			String[] desc = RenderHelper.splitStringInLines(selected.getDescription(), width - finalHeight - 15, g2d);
 			int line = 0;
@@ -185,23 +187,23 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		g2d.setColor(Color.RED);
 		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		RenderHelper.drawCenteredString("x", width - 10, 0, 10, 10, g2d);
-		
+
 		if(selected != null){
 			//Render play/download buttons
 			{
 				int bw = 120;
 				int bh = 30;
 				int xC = (int) (g.getClipBounds().getWidth() - bw - 5);
-				int yC =  (int) (finalHeight - bh - 5);
+				int yC =  finalHeight - bh - 5;
 
 				g2d.setPaint(new Color(Color.LIGHT_GRAY.getRed() + 40, Color.LIGHT_GRAY.getGreen() + 40, Color.LIGHT_GRAY.getBlue() + 40));
 				g2d.fillRect(xC, yC, bw, bh);
 				g2d.setPaint(Color.GRAY);
 				g2d.drawRect(xC, yC, bw, bh);
-				
+
 				g2d.setColor(Color.BLACK);
 				g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-				
+
 				if(selected.hasDownloaded()){
 					RenderHelper.drawCenteredString("Play", xC, yC, bw, bh, g2d);
 				}else{
@@ -216,7 +218,7 @@ public class ComponentContainerModpacks extends ComponentContainer {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onMouseUp(int x, int y, int button) {
 		float description = progress;
@@ -226,12 +228,12 @@ public class ComponentContainerModpacks extends ComponentContainer {
 		int width = this.width - i.left - (border*2);
 		int finalHeight = (int) ((height * descriptionArea) + border - descriptionInsets.top - descriptionInsets.bottom);
 		System.out.println("FH Click: " + finalHeight);
-		
+
 		int bw = 120;
 		int bh = 30;
-		int xC = (int) (width - bw - 5);
-		int yC =  (int) (height - bh - 5);
-		
+		int xC = width - bw - 5;
+		int yC =  height - bh - 5;
+
 		if(slide){
 			if(x >= (width - 15) && x < width){
 				if(y >= (height - ((int)description) - border + descriptionInsets.top) && y < (height - ((int)description) - border + descriptionInsets.top + 10)){
@@ -239,14 +241,15 @@ public class ComponentContainerModpacks extends ComponentContainer {
 					return;
 				}
 			}
-			
+
 			if(selected != null){
 				if(x >= xC && x < (xC + bw)){
 					if(y >= yC && y < (yC + bh)){//Click button on the right
 						if(selected.hasDownloaded()){
 							selected.play();
-						}else{
-							new Thread(new Runnable() {
+						}else{//download pack
+							new Thread(new Runnable() {//create new thread to download
+								@Override
 								public void run() {
 									OpenLauncher.getServer(selected.getServerID()).updatePack(selected.getId());
 									try{

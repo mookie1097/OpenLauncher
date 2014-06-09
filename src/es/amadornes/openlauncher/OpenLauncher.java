@@ -1,6 +1,7 @@
 package es.amadornes.openlauncher;
 
 import java.awt.Font;
+import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,6 +22,7 @@ import es.amadornes.openlauncher.gui.TabNews;
 import es.amadornes.openlauncher.gui.TabSettings;
 import es.amadornes.openlauncher.modpack.Modpack;
 import es.amadornes.openlauncher.server.DownloadServerAmadornes;
+import es.amadornes.openlauncher.util.Downloader;
 import es.amadornes.openlauncher.util.Util;
 
 /**
@@ -45,26 +47,47 @@ public class OpenLauncher {
 	private static DownloadServer[] servers = new DownloadServer[]{ new DownloadServerAmadornes() };
 	public static List<Modpack> modpacks = new ArrayList<Modpack>();
 
-	public static void main(String[] args){
+	public static void main(String[] args)  {
 		/* Add shutdown event */
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {@Override
 			public void run(){ exit(); }}));
 		System.out.println("preinit");
 
+
+		File dlFolder = new File(Util.getDownloadsFolder(), "asdf" + "/");
+		dlFolder.mkdirs();
+
+
+
 		//{{ add modpacks
-		String urlstring = "https://gist.githubusercontent.com/mookie1097/2ab755c62a5a6daa47b5/raw/00e7006a957b754185d98ffd4ff7b0ffbb5b2cf1/modpackList";
+		String urlstring = "http://textuploader.com/03aa/raw";//dont think ill ever have to change this(for git i did)
 		boolean isprivate = false;
 		String mcVersion = "mcv71.7.2";
 		int version =1;
 		for (FeedMessage m: ReadXMLFromURl.getModpackData(urlstring)) {
 			try {
-				modpacks.add(new Modpack(m.title,m.title,new URL(m.link),m.author,isprivate,version,m.version,mcVersion,"serverid"));
-				modpacks.get(modpacks.size()-1).setDescription(m.description);
+				modpacks.add(new Modpack(m.title,m.title,new URL(m.link),m.author,isprivate,version,m.version,mcVersion,"serverid",m.link));
+				modpacks.get(modpacks.size()-1).setDescription(m.description);//set desc
+
+
 			} catch (MalformedURLException e) {
 
 				e.printStackTrace();
 			}
 		}
+		for (Modpack m: modpacks) {
+			File zip = new File(dlFolder,m.getName()+m.getVersion()+".jar");
+			System.out.println(m.link);
+			try {
+				Downloader.download(new URL(m.link), zip);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
 		//}}
 
 		preInit();

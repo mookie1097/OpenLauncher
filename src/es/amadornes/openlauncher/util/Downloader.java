@@ -7,7 +7,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 public class Downloader {
-	
+
 	public static void download(URL url, File file) throws Exception{
 		file.getParentFile().mkdirs();
 		file.createNewFile();
@@ -17,5 +17,5 @@ public class Downloader {
 		fos.close();
 		rbc.close();
 	}
-	
+
 }

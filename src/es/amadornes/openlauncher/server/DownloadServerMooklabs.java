@@ -22,6 +22,9 @@ import es.amadornes.openlauncher.util.ZipUtils;
 public class DownloadServerMooklabs extends DownloadServer {
 
 	private static final String serverURL = "http://pc.amadornes.es/openlauncher/";
+	public String url = "http://www.technicpack.net/modpack/details/";
+	//public Icon = new ImageIcon(pack.getLogo().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
+
 
 	public DownloadServerMooklabs() {
 		super("amadornes");
@@ -44,9 +47,7 @@ public class DownloadServerMooklabs extends DownloadServer {
 		return null;
 	}
 
-	String url = "http://www.technicpack.net/modpack/details/";
 
-	Icon = new ImageIcon(pack.getLogo().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
 
 
 

@@ -8,9 +8,9 @@ import org.json.JSONObject;
 import es.amadornes.openlauncher.modpack.Modpack;
 
 public class Util {
-	
+
 	public static String APP_NAME = "openlauncher";
-	
+
 	public static OS getPlatform() {
 		String osName = System.getProperty("os.name").toLowerCase();
 		if (osName.contains("win"))
@@ -23,7 +23,7 @@ public class Util {
 			return OS.LINUX;
 		return OS.UNKNOWN;
 	}
-    
+
 	public static File getWorkingDirectory() {
 		String userHome = System.getProperty("user.home", ".");
 		File workingDirectory;
@@ -39,27 +39,27 @@ public class Util {
 			workingDirectory = new File(folder, APP_NAME + "/");
 			break;
 		case LINUX:
-			workingDirectory = new File(userHome,
-					"Library/Application Support/" + APP_NAME + "/");
+			workingDirectory = new File(userHome, APP_NAME + "/");
 			break;
 		default:
 			workingDirectory = new File(userHome, APP_NAME + "/");
 		}
+		System.out.println(workingDirectory);
 		return workingDirectory;
 	}
 
 	private static enum OS {
 		WINDOWS, MACOS, SOLARIS, LINUX, UNKNOWN;
 	}
-	
+
 	public static File getInstancesFolder(){
 		return new File(getWorkingDirectory(), "instances/");
 	}
-	
+
 	public static File getDownloadsFolder(){
 		return new File(getWorkingDirectory(), "downloads/");
 	}
-	
+
 	public static JSONObject getPackData(String server, String packid){
 		try{
 			File f = new File(getInstancesFolder(), server + "_" + packid + "/pack.json");
@@ -68,21 +68,21 @@ public class Util {
 		}catch(Exception e){}
 		return null;
 	}
-	
+
 	public static File getPackDataFile(String server, String packid){
 		try{
 			return new File(getInstancesFolder(), server + "_" + packid + "/pack.json");
 		}catch(Exception e){}
 		return null;
 	}
-	
+
 	public static Modpack getModpackFromLocalInfo(String server, String packid){
 		JSONObject data = getPackData(server, packid);
 		if(data != null){
-			Modpack pack = new Modpack(packid, null, null, null, false, data.getInt("versionid"), data.getString("version"), null, server);
+			Modpack pack = new Modpack(packid, null, null, null, false, data.getInt("versionid"), data.getString("version"), null, server,null);
 			return pack;
 		}
 		return null;
 	}
-	
+
 }
