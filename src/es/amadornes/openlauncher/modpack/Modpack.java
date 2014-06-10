@@ -6,6 +6,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import net.technicpack.launchercore.util.Settings;
 import es.amadornes.openlauncher.util.Util;
 
 public class Modpack {
@@ -143,7 +144,11 @@ public class Modpack {
 	}
 
 	public void play(){
-		//TODO MAKE IT RUN
+		Process minecraftProcess = MinecraftLauncherNew.launchMinecraft(Settings.getSettings().getJavaPath(), gameFolder, assetDir, natDir, classpath,
+				packjson.mainClass != null ? packjson.mainClass : base.mainClass, packjson.minecraftArguments != null ? packjson.minecraftArguments : base.minecraftArguments,
+						packjson.assets != null ? packjson.assets : base.getAssets(), Settings.getSettings().getRamMax(), pack.getMaxPermSize(), pack.getMcVersion(), resp.getAuth(), isLegacy);
+
+
 	}
 
 }

@@ -51,8 +51,25 @@ public class Util {
 		WINDOWS, MACOS, SOLARIS, LINUX, UNKNOWN;
 	}
 
+	public String getNativeString(OS platform) {
+		switch (platform) {
+		case LINUX:
+			return getNatives().get("linux");
+		case WINDOWS:
+			return getNatives().get("windows");
+		case MACOS:
+			return getNatives().get("osx");
+		default:
+			return getNatives().get("linux");
+		}
+
+	}
+
 	public static File getInstancesFolder(){
 		return new File(getWorkingDirectory(), "instances/");
+	}
+	public static File getMinecraftFolder(){
+		return new File(getWorkingDirectory(), "minecrafts/");
 	}
 
 	public static File getDownloadsFolder(){

@@ -13,6 +13,7 @@ public class Downloader {
 		file.createNewFile();
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 		FileOutputStream fos = new FileOutputStream(file);
+		//System.out.print(" File size: " +fos.getChannel().size());
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
 		rbc.close();
