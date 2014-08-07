@@ -87,7 +87,7 @@ public class RSSFeedParser {
 					case PUB_DATE:
 						pubdate = getCharacterData(event, eventReader);
 						break;
-					case "picLink":
+					case "piclink":
 						picLink = getCharacterData(event, eventReader);
 						break;
 					}
@@ -99,6 +99,7 @@ public class RSSFeedParser {
 						message.setLink(link);
 						message.setTitle(title);
 						message.version = version;
+						message.picLink = picLink;
 
 						feed.getMessages().add(message);
 						event = eventReader.nextEvent();

@@ -33,7 +33,7 @@ public class FeedMessage {
 	}
 
 	public void setLink(String link) {
-		this.link = link;//link;
+		this.link = link;
 	}
 
 	public String getAuthor() {
